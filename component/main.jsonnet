@@ -17,29 +17,25 @@ local namespace = kube.Namespace(params.namespace) {
   },
 };
 
+local lvmd_config = {
+  'socket-name': '/run/topolvm/lvmd.sock',
+  'device-classes': [
+    params.deviceclasses[name] + { name: name }
+    for name in std.objectFields(params.deviceclasses)
+  ]
+};
+
 local lvmd_configmap = kube.ConfigMap('topolvm-lvmd0') {
   metadata+: {
     labels+: {
       idx: '0',
       'app.kubernetes.io/name': 'topolvm',
       'app.kubernetes.io/instance': 'topolvm',
-      'app.kubernetes.io/version': '0.8.3',
+      'app.kubernetes.io/version': params.images.topolvm.tag,
     },
   },
   data: {
-    'lvmd.yaml': |||
-      socket-name: /run/topolvm/lvmd.sock
-      device-classes:
-      - name: %(name)s
-        default: %(default)s
-        spare-gb: %(sparegb)d
-        volume-group: %(volumegroup)s
-    ||| % {
-      name: params.deviceclasses[0].name,
-      default: 'true',
-      sparegb: params.deviceclasses[0].sparegb,
-      volumegroup: params.deviceclasses[0].volumegroup,
-    },
+    'lvmd.yaml': std.manifestYamlDoc(lvmd_config),
   },
 };
 
@@ -128,6 +124,23 @@ local lvmd_daemonset = kube.DaemonSet('topolvm-lvmd0') {
   },
 };
 
+local StorageClass(name='ssd-local') = kube.StorageClass(name) {
+  metadata+: {
+    labels+: {
+      'app.kubernetes.io/name': 'topolvm',
+      'app.kubernetes.io/instance': 'topolvm',
+      'app.kubernetes.io/version': params.images.topolvm.tag,
+    },
+  },
+  allowVolumeExpansion: params.storageclasses[name].volumeexpansion,
+  parameters: {
+    'csi.storage.k8s.io/fstype': params.storageclasses[name].fstype,
+    'topolvm.cybozu.com/device-class': params.storageclasses[name].class,
+  },
+  provisioner: 'topolvm.cybozu.com',
+  volumeBindingMode: 'WaitForFirstConsumer',
+};
+
 local PriorityClass(name='topolvm') = {
   apiVersion: 'scheduling.k8s.io/v1',
   kind: 'PriorityClass',
@@ -145,4 +158,8 @@ local PriorityClass(name='topolvm') = {
   '11_lvmd_configmap': lvmd_configmap,
   '12_lvmd_daemonset': lvmd_daemonset,
   '21_priority_class': PriorityClass(),
+  '22_storage_classes': [
+    StorageClass(name),
+    for name in std.objectFields(params.storageclasses)
+  ],
 }

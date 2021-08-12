@@ -40,28 +40,115 @@ default::
 +
 [source,yaml]
 ----
-- name: ssd
+ssd:
   volumegroup: vgssd
-  sparegb: 1
+  sparegb: 10
+  default: false
 ----
 
-Currently only one deviceclass is supported.
+Each key represents a different device class.
+
+=== `volumegroup`
+
+[horizontal]
+type:: string
+
+Name of the LVM volumegroup to be used by this device class.
+
+=== `spagegb`
+
+[horizontal]
+type:: integer
+
+This amount of space will be reserved on the volumegroup and not allocated or reported as free by TopoLVM.
+
+=== `default`
+
+[horizontal]
+type:: string
+
+If the storage class has no special parameter set, this device class will be used. Generally leave this as `false` and select the device class while configuring the storage class.
+
+=== Example
+
+[source,yaml]
+----
+parameters:
+  topolvm:
+    deviceclasses:
+      ssd:
+        volumegroup: vgssd
+        sparegb: 1
+        default: false
+      hdd:
+        volumegroup: vghdd
+        sparegb: 5
+        default: false
+----
 
 == `storageclasses`
 
 [horizontal]
-type:: list
+type:: dictionary
 default::
 +
 [source,yaml]
 ----
-- name: ssd-local
-  fstype: xfs
+ssd-local:
+  class: sdd
+  fstype: ext4
   isdefault: false
   volumeexpansion: true
 ----
 
-Currently only one storageclass is supported.
+Each key represents a different storage class.
+
+=== `class`
+
+[horizontal]
+type:: string
+
+Key of the device class used by this storage class.
+
+=== `fstype`
+
+[horizontal]
+type:: string
+
+The filesystem that is used with this storage class.
+
+=== `isdefault`
+
+[horizontal]
+type:: boolean
+
+Should this be the default storage class.
+
+=== `volumeexpansion`
+
+[horizontal]
+type:: boolean
+
+Should volume expansion be allowed with this storage class.
+
+=== Example
+
+[source,yaml]
+----
+parameters:
+  topolvm:
+    storageclasses:
+      ssd-local:
+        class: ssd
+        fstype: ext4
+        isdefault: false
+        volumeexpansion: true
+      hdd-local:
+        class: hdd
+        fstype: ext4
+        isdefault: false
+        volumeexpansion: true
+----
 
 == `helmValues`
 
@@ -78,13 +165,14 @@ Values passed to Helm. See https://github.com/topolvm/topolvm/blob/main/charts/t
 parameters:
   topolvm:
     deviceclasses:
-      - name: ssd
+      ssd:
         volumegroup: vgssd
-        sparegb: 1
+        sparegb: 10
 
     storageclasses:
-      - name: ssd-local
-        fstype: xfs
+      ssd-local:
+        class: ssd
+        fstype: ext4
         isdefault: false
         volumeexpansion: true
 ----

@@ -14,16 +14,17 @@ parameters:
         tag: v2.2.1
 
     deviceclasses:
-      - name: ssd
+      ssd:
         volumegroup: vgssd
-        sparegb: 1
+        sparegb: 10
+        default: false
 
     storageclasses:
-      - name: ssd-local
-        fstype: xfs
+      ssd-local:
+        class: ssd
+        fstype: ext4
         isdefault: false
         volumeexpansion: true
-
 
     # Resource limits
     resources:
@@ -98,24 +99,6 @@ parameters:
           enabled: true
         # controller.resources -- Specify resources.
         resources: ${topolvm:resources:controller}
-
-      # storageClasses -- Whether to create storageclass(s)
-      storageClasses:
-        - name: ${topolvm:storageclasses:0:name} # Defines name of storage classe.
-          storageClass:
-            # Additional annotations
-            annotations: {}
-            # Supported filesystems are: ext4, xfs, and btrfs.
-            fsType: ${topolvm:storageclasses:0:fstype}
-            # Default storage class for dynamic volume provisioning
-            isDefaultClass: ${topolvm:storageclasses:0:isdefault}
-            # volumeBindingMode can be either WaitForFirstConsumer or Immediate.
-            # WaitForFirstConsumer is recommended because TopoLVM cannot schedule pods wisely if volumeBindingMode is Immediate.
-            volumeBindingMode: WaitForFirstConsumer
-            # enables CSI drivers to expand volumes. This feature is available for Kubernetes 1.16 and later releases.
-            allowVolumeExpansion: ${topolvm:storageclasses:0:volumeexpansion}
-            additionalParameters:
-              "topolvm.cybozu.com/device-class": ${topolvm:deviceclasses:0:name}
 
       webhook:
         podMutatingWebhook:
