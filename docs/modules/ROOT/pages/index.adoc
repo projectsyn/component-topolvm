@@ -6,7 +6,7 @@ See the xref:references/parameters.adoc[parameters] reference for further detail
 
 == Setup
 
-* Create an LVM VolumeGroup named `vgssd` on the nodes you want.  
+* Create an LVM VolumeGroup named `vgssd` on the nodes you want.
 * Add a label `syn.tools/topolvm=""` to the nodes which have the VolumeGroup.
 
 == Maintenance
