@@ -1,5 +1,16 @@
-= topolvm
+= TopoLVM
 
-topolvm is a Commodore component to manage topolvm.
+TopoLVM is a Commodore component to manage topolvm.
 
 See the xref:references/parameters.adoc[parameters] reference for further details.
+
+== Setup
+
+* Create an LVM VolumeGroup named `vgssd` on the nodes you want.  
+* Add a label `syn.tools/topolvm=""` to the nodes which have the VolumeGroup.
+
+== Maintenance
+
+=== Extending Capacity
+
+Topolvm (lvmd) checks a node ~10 minutes, so to extend the capacity of a node just extend its volumegroup.
