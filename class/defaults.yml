@@ -3,6 +3,16 @@ parameters:
     =_metadata: {}
     namespace: syn-topolvm
 
+    images:
+      topolvm:
+        registry: quay.io
+        repository: topolvm/topolvm-with-sidecar
+        tag: 0.8.3
+      csi_provisioner:
+        registry: k8s.gcr.io
+        repository: sig-storage/csi-provisioner
+        tag: v2.2.1
+
     deviceclasses:
       - name: ssd
         volumegroup: vgssd
@@ -49,15 +59,15 @@ parameters:
     helmValues:
       image:
         # image.repository -- TopoLVM image repository to use.
-        repository: quay.io/topolvm/topolvm-with-sidecar
+        repository: ${topolvm:images:topolvm:registry}/${topolvm:images:topolvm:repository}
         # image.tag -- TopoLVM image tag to use.
-        tag: 0.8.3
+        tag: ${topolvm:images:topolvm:tag}
         # image.pullPolicy -- TopoLVM image pullPolicy.
         pullPolicy: IfNotPresent
         csi:
           # image.csi.csiProvisioner -- Specify csi-provisioner image.
           # If not specified, `quay.io/topolvm/topolvm-with-sidecar:{{ .Values.image.tag }}` will be used.
-          csiProvisioner: k8s.gcr.io/sig-storage/csi-provisioner:v2.2.1
+          csiProvisioner: ${topolvm:images:csi_provisioner:registry}/${topolvm:images:csi_provisioner:repository}:${topolvm:images:csi_provisioner:tag}
 
       # scheduler extender for TopoLVM
       scheduler:

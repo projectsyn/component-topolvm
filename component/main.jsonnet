@@ -75,7 +75,7 @@ local lvmd_daemonset = kube.DaemonSet('topolvm-lvmd0') {
         containers: [
           {
             name: 'lvmd',
-            image: params.helmValues.image.repository + ':' + params.helmValues.image.tag,
+            image: params.images.topolvm.registry + "/" + params.images.topolvm.repository + ':' + params.images.topolvm.tag,
             securityContext: {
               privileged: true,
             },

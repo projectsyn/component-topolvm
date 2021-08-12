@@ -10,6 +10,28 @@ default:: `syn-topolvm`
 
 The namespace in which to deploy this component.
 
+== `images`
+
+[horizontal]
+type:: dictionary
+default::
++
+[source,yaml]
+----
+topolvm:
+  registry: quay.io
+  repository: topolvm/topolvm-with-sidecar
+  tag: 0.8.3
+csi_provisioner:
+  registry: k8s.gcr.io
+  repository: sig-storage/csi-provisioner
+  tag: v2.2.1
+----
+
+The `csi_provisioner` uses a separate image, bc the current implementation in `topolvm-with-sidecar:0.8.3` contains a bug.
+
+This configuration should not be touched and will be updated with future releases of this component.
+
 == `deviceclasses`
 
 [horizontal]
