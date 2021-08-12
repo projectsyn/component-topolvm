@@ -14,7 +14,7 @@ The namespace in which to deploy this component.
 
 [horizontal]
 type:: list
-default:: 
+default::
 +
 [source,yaml]
 ----
@@ -29,7 +29,7 @@ Currently only one deviceclass is supported.
 
 [horizontal]
 type:: list
-default:: 
+default::
 +
 [source,yaml]
 ----
