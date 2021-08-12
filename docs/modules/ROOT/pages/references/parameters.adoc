@@ -30,7 +30,7 @@ csi_provisioner:
 
 The `csi_provisioner` uses a separate image, bc the current implementation in `topolvm-with-sidecar:0.8.3` contains a bug.
 
-This configuration should not be touched and will be updated with future releases of this component.
+This configuration shouldn't be touched and will be updated with future releases of this component.
 
 == `deviceclasses`
 
@@ -115,7 +115,7 @@ Key of the device class used by this storage class.
 [horizontal]
 type:: string
 
-The filesystem that is used with this storage class.
+The filesystem that's used with this storage class.
 
 === `isdefault`
 

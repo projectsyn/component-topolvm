@@ -20,7 +20,7 @@ local namespace = kube.Namespace(params.namespace) {
 local lvmd_config = {
   'socket-name': '/run/topolvm/lvmd.sock',
   'device-classes': [
-    params.deviceclasses[name] + { name: name }
+    params.deviceclasses[name] + { name: name },
     for name in std.objectFields(params.deviceclasses)
   ]
 };
