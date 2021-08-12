@@ -20,9 +20,9 @@ local namespace = kube.Namespace(params.namespace) {
 local lvmd_config = {
   'socket-name': '/run/topolvm/lvmd.sock',
   'device-classes': [
-    params.deviceclasses[name] + { name: name },
+    params.deviceclasses[name] { name: name }
     for name in std.objectFields(params.deviceclasses)
-  ]
+  ],
 };
 
 local lvmd_configmap = kube.ConfigMap('topolvm-lvmd0') {
@@ -71,7 +71,7 @@ local lvmd_daemonset = kube.DaemonSet('topolvm-lvmd0') {
         containers: [
           {
             name: 'lvmd',
-            image: params.images.topolvm.registry + "/" + params.images.topolvm.repository + ':' + params.images.topolvm.tag,
+            image: params.images.topolvm.registry + '/' + params.images.topolvm.repository + ':' + params.images.topolvm.tag,
             securityContext: {
               privileged: true,
             },
@@ -159,7 +159,7 @@ local PriorityClass(name='topolvm') = {
   '12_lvmd_daemonset': lvmd_daemonset,
   '21_priority_class': PriorityClass(),
   '22_storage_classes': [
-    StorageClass(name),
+    StorageClass(name)
     for name in std.objectFields(params.storageclasses)
   ],
 }
