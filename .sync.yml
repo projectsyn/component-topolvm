@@ -1,0 +1,7 @@
+:global:
+  componentName: topolvm
+  githubUrl: https://github.com/projectsyn/component-topolvm
+
+docs/antora.yml:
+  name: topolvm
+  title: topolvm
