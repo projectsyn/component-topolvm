@@ -13,4 +13,4 @@ See the xref:references/parameters.adoc[parameters] reference for further detail
 
 === Extending Capacity
 
-Topolvm (lvmd) checks a node ~10 minutes, so to extend the capacity of a node just extend its volumegroup.
+TopoLVM (lvmd) scans all nodes every 10 minutes, so to extend the capacity of a node just extend its volume group and wait until the capacity change is picked up by TopoLVM.
