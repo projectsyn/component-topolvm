@@ -1,5 +1,6 @@
 :global:
   componentName: topolvm
+  feature_componentCompile: false
 
 docs/antora.yml:
   name: topolvm

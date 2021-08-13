@@ -1,11 +1,31 @@
 parameters:
   kapitan:
     compile:
+      # ArgoCD App
       - input_paths:
           - topolvm/component/app.jsonnet
         input_type: jsonnet
         output_path: apps/
+      # CRDs
+      - input_paths:
+          - topolvm/helmcharts/topolvm/crds
+        input_type: copy
+        output_path: topolvm/
+      # Custom Manifests
       - input_paths:
           - topolvm/component/main.jsonnet
         input_type: jsonnet
         output_path: topolvm/
+      - input_paths:
+          - topolvm/component/ocpscc.jsonnet
+        input_type: jsonnet
+        output_path: topolvm/
+      # Helmchart
+      - input_paths:
+          - topolvm/helmcharts/topolvm/
+        input_type: helm
+        output_path: topolvm/10_helmchart
+        helm_values: ${topolvm:helmValues}
+        helm_params:
+          release_name: topolvm
+          namespace: ${topolvm:namespace}

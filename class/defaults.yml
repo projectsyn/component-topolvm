@@ -2,3 +2,104 @@ parameters:
   topolvm:
     =_metadata: {}
     namespace: syn-topolvm
+
+    images:
+      topolvm:
+        registry: quay.io
+        repository: topolvm/topolvm-with-sidecar
+        tag: 0.8.3
+      csi_provisioner:
+        registry: k8s.gcr.io
+        repository: sig-storage/csi-provisioner
+        tag: v2.2.1
+
+    deviceclasses:
+      ssd:
+        volumegroup: vgssd
+        sparegb: 10
+        default: false
+
+    storageclasses:
+      ssd-local:
+        class: ssd
+        fstype: ext4
+        volumeexpansion: true
+
+    # Resource limits
+    resources:
+      scheduler:
+        requests:
+          memory: 50Mi
+          cpu: 50m
+        limits:
+          memory: 200Mi
+          cpu: 200m
+      lvmd:
+        requests:
+          memory: 100Mi
+          cpu: 100m
+        limits:
+          memory: 500Mi
+          cpu: 500m
+      node:
+        requests:
+          memory: 100Mi
+          cpu: 100m
+        limits:
+          memory: 500Mi
+          cpu: 500m
+      controller:
+        requests:
+          memory: 50Mi
+          cpu: 50m
+        limits:
+          memory: 200Mi
+          cpu: 200m
+
+    helmValues:
+      image:
+        # image.repository -- TopoLVM image repository to use.
+        repository: ${topolvm:images:topolvm:registry}/${topolvm:images:topolvm:repository}
+        # image.tag -- TopoLVM image tag to use.
+        tag: ${topolvm:images:topolvm:tag}
+        # image.pullPolicy -- TopoLVM image pullPolicy.
+        pullPolicy: IfNotPresent
+        csi:
+          # image.csi.csiProvisioner -- Specify csi-provisioner image.
+          # If not specified, `quay.io/topolvm/topolvm-with-sidecar:{{ .Values.image.tag }}` will be used.
+          csiProvisioner: ${topolvm:images:csi_provisioner:registry}/${topolvm:images:csi_provisioner:repository}:${topolvm:images:csi_provisioner:tag}
+
+      # scheduler extender for TopoLVM
+      scheduler:
+        # scheduler.enabled --  If true, enable scheduler extender for TopoLVM
+        enabled: false
+        # scheduler.resources -- Specify resources on the TopoLVM scheduler extender container.
+        resources: ${topolvm:resources:scheduler}
+
+      # lvmd service
+      lvmd:
+        # lvmd.managed -- If true, set up lvmd service with DaemonSet.
+        managed: true
+        # lvmd.resources -- Specify resources.
+        resources: ${topolvm:resources:lvmd}
+
+      # CSI node service
+      node:
+        # node.nodeSelector -- Specify nodeSelector.
+        nodeSelector:
+          syn.tools/topolvm: ""
+        # node.resources -- Specify resources.
+        resources: ${topolvm:resources:node}
+
+      # CSI controller service
+      controller:
+        storageCapacityTracking:
+          # controller.storageCapacityTracking.enabled -- Enable Storage Capacity Tracking for csi-provisoner.
+          enabled: true
+        # controller.resources -- Specify resources.
+        resources: ${topolvm:resources:controller}
+
+      webhook:
+        podMutatingWebhook:
+          # webhook.podMutatingWebhook.enabled -- Enable Pod MutatingWebhook.
+          enabled: false

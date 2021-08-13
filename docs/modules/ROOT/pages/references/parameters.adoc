@@ -10,10 +10,159 @@ default:: `syn-topolvm`
 
 The namespace in which to deploy this component.
 
+== `images`
+
+[horizontal]
+type:: dictionary
+default::
++
+[source,yaml]
+----
+topolvm:
+  registry: quay.io
+  repository: topolvm/topolvm-with-sidecar
+  tag: 0.8.3
+csi_provisioner:
+  registry: k8s.gcr.io
+  repository: sig-storage/csi-provisioner
+  tag: v2.2.1
+----
+
+The `csi_provisioner` uses a separate image, bc the current implementation in `topolvm-with-sidecar:0.8.3` contains a bug.
+
+This configuration shouldn't be touched and will be updated with future releases of this component.
+
+== `deviceclasses`
+
+[horizontal]
+type:: list
+default::
++
+[source,yaml]
+----
+ssd:
+  volumegroup: vgssd
+  sparegb: 10
+  default: false
+----
+
+Each key represents a different device class.
+
+=== `volumegroup`
+
+[horizontal]
+type:: string
+
+Name of the LVM volumegroup to be used by this device class.
+
+=== `spagegb`
+
+[horizontal]
+type:: integer
+
+This amount of space will be reserved on the volumegroup and not allocated or reported as free by TopoLVM.
+
+=== `default`
+
+[horizontal]
+type:: string
+
+If the storage class has no special parameter set, this device class will be used. Generally leave this as `false` and select the device class while configuring the storage class.
+
+=== Example
+
+[source,yaml]
+----
+parameters:
+  topolvm:
+    deviceclasses:
+      ssd:
+        volumegroup: vgssd
+        sparegb: 1
+        default: false
+      hdd:
+        volumegroup: vghdd
+        sparegb: 5
+        default: false
+----
+
+== `storageclasses`
+
+[horizontal]
+type:: dictionary
+default::
++
+[source,yaml]
+----
+ssd-local:
+  class: sdd
+  fstype: ext4
+  isdefault: false
+  volumeexpansion: true
+----
+
+Each key represents a different storage class.
+
+=== `class`
+
+[horizontal]
+type:: string
+
+Key of the device class used by this storage class.
+
+=== `fstype`
+
+[horizontal]
+type:: string
+
+The filesystem that's used with this storage class.
+
+=== `volumeexpansion`
+
+[horizontal]
+type:: boolean
+
+Should volume expansion be allowed with this storage class.
+
+=== Example
+
+[source,yaml]
+----
+parameters:
+  topolvm:
+    storageclasses:
+      ssd-local:
+        class: ssd
+        fstype: ext4
+        volumeexpansion: true
+      hdd-local:
+        class: hdd
+        fstype: ext4
+        volumeexpansion: true
+----
+
+== `helmValues`
+
+[horizontal]
+type:: dict
+default:: See `class/defaults.yaml`
+
+Values passed to Helm. See https://github.com/topolvm/topolvm/blob/main/charts/topolvm/values.yaml
 
 == Example
 
 [source,yaml]
 ----
-namespace: example-namespace
+parameters:
+  topolvm:
+    deviceclasses:
+      ssd:
+        volumegroup: vgssd
+        sparegb: 10
+
+    storageclasses:
+      ssd-local:
+        class: ssd
+        fstype: ext4
+        volumeexpansion: true
 ----
