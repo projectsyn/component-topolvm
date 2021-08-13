@@ -1,6 +1,7 @@
 // main template for topolvm
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
+local sc = import 'lib/storageclass.libsonnet';
 local inv = kap.inventory();
 // The hiera parameters for the component
 local params = inv.parameters.topolvm;
@@ -124,7 +125,7 @@ local lvmd_daemonset = kube.DaemonSet('topolvm-lvmd0') {
   },
 };
 
-local StorageClass(name='ssd-local') = kube.StorageClass(name) {
+local StorageClass(name='ssd-local') = sc.storageClass(name) {
   metadata+: {
     labels+: {
       'app.kubernetes.io/name': 'topolvm',

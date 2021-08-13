@@ -117,13 +117,6 @@ type:: string
 
 The filesystem that's used with this storage class.
 
-=== `isdefault`
-
-[horizontal]
-type:: boolean
-
-Should this be the default storage class.
-
 === `volumeexpansion`
 
 [horizontal]
@@ -141,12 +134,10 @@ parameters:
       ssd-local:
         class: ssd
         fstype: ext4
-        isdefault: false
         volumeexpansion: true
       hdd-local:
         class: hdd
         fstype: ext4
-        isdefault: false
         volumeexpansion: true
 ----
 
@@ -173,6 +164,5 @@ parameters:
       ssd-local:
         class: ssd
         fstype: ext4
-        isdefault: false
         volumeexpansion: true
 ----

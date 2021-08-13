@@ -23,7 +23,6 @@ parameters:
       ssd-local:
         class: ssd
         fstype: ext4
-        isdefault: false
         volumeexpansion: true
 
     # Resource limits
