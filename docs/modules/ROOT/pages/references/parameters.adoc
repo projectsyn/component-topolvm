@@ -41,21 +41,21 @@ default::
 [source,yaml]
 ----
 ssd:
-  volumegroup: vgssd
-  sparegb: 10
+  volume-group: vgssd
+  spare-gb: 10
   default: false
 ----
 
 Each key represents a different device class.
 
-=== `volumegroup`
+=== `volume-group`
 
 [horizontal]
 type:: string
 
 Name of the LVM volumegroup to be used by this device class.
 
-=== `spagegb`
+=== `spare-gb`
 
 [horizontal]
 type:: integer
@@ -77,12 +77,12 @@ parameters:
   topolvm:
     deviceclasses:
       ssd:
-        volumegroup: vgssd
-        sparegb: 1
+        volume-group: vgssd
+        spare-gb: 1
         default: false
       hdd:
-        volumegroup: vghdd
-        sparegb: 5
+        volume-group: vghdd
+        spare-gb: 5
         default: false
 ----
 
@@ -95,9 +95,8 @@ default::
 [source,yaml]
 ----
 ssd-local:
-  class: sdd
+  class: ssd
   fstype: ext4
-  isdefault: false
   volumeexpansion: true
 ----
 
@@ -157,8 +156,9 @@ parameters:
   topolvm:
     deviceclasses:
       ssd:
-        volumegroup: vgssd
-        sparegb: 10
+        volume-group: vgssd
+        spare-gb: 10
+        default: false
 
     storageclasses:
       ssd-local:
