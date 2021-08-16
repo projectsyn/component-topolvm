@@ -15,8 +15,8 @@ parameters:
 
     deviceclasses:
       ssd:
-        volumegroup: vgssd
-        sparegb: 10
+        volume-group: vgssd
+        spare-gb: 10
         default: false
 
     storageclasses:
