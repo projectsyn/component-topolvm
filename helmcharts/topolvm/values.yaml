@@ -45,6 +45,8 @@ scheduler:
   service:
     # scheduler.service.type -- Specify Service type.
     type: LoadBalancer
+    # scheduler.service.clusterIP -- Specify Service clusterIP.
+    clusterIP:  # None
     # scheduler.service.nodePort -- (int) Specify nodePort.
     nodePort:  # 30251
 
@@ -244,6 +246,14 @@ node:
       - name: csi-plugin-dir
         mountPath: /var/lib/kubelet/plugins/kubernetes.io/csi
         mountPropagation: "Bidirectional"
+
+  psp:
+    # node.psp.allowedHostPaths -- Specify allowedHostPaths.
+    allowedHostPaths:
+      - pathPrefix: "/var/lib/kubelet"
+        readOnly: false
+      - pathPrefix: "/run/topolvm"
+        readOnly: false
 
 # CSI controller service
 controller:
