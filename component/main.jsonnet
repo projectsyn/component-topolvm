@@ -140,6 +140,7 @@ local StorageClass(name='ssd-local') = sc.storageClass(name) {
   },
   provisioner: 'topolvm.cybozu.com',
   volumeBindingMode: 'WaitForFirstConsumer',
+  [if std.objectHas(params.storageclasses[name], 'retainpolicy') then 'reclaimPolicy']: params.storageclasses[name].retainpolicy,
 };
 
 local PriorityClass(name='topolvm') = {

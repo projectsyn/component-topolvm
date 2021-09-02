@@ -123,6 +123,13 @@ type:: boolean
 
 Should volume expansion be allowed with this storage class.
 
+=== `retainpolicy`
+
+[horizontal]
+type:: string
+
+Optional, can be used to overwrite the default retain policy.
+
 === Example
 
 [source,yaml]
@@ -134,6 +141,7 @@ parameters:
         class: ssd
         fstype: ext4
         volumeexpansion: true
+        retainpolicy: Retain
       hdd-local:
         class: hdd
         fstype: ext4
