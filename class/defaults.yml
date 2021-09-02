@@ -17,7 +17,7 @@ parameters:
       ssd:
         volume-group: vgssd
         spare-gb: 10
-        default: false
+        default: true
 
     storageclasses:
       ssd-local:
