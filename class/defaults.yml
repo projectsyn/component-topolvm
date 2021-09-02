@@ -24,7 +24,6 @@ parameters:
         class: ssd
         fstype: ext4
         volumeexpansion: true
-        retainpolicy: Retain
 
     # Resource limits
     resources:
