@@ -1,5 +1,11 @@
 parameters:
   kapitan:
+    dependencies:
+      - type: git
+        source: https://github.com/topolvm/topolvm
+        ref: ${topolvm:charts:topolvm}
+        subdir: charts/topolvm
+        output_path: dependencies/topolvm/helmcharts/topolvm/${topolvm:charts:topolvm}/
     compile:
       # ArgoCD App
       - input_paths:
@@ -8,7 +14,7 @@ parameters:
         output_path: apps/
       # CRDs
       - input_paths:
-          - topolvm/helmcharts/topolvm/crds
+          - topolvm/helmcharts/topolvm/${topolvm:charts:topolvm}/crds
         input_type: copy
         output_path: topolvm/
       # Custom Manifests
@@ -22,7 +28,14 @@ parameters:
         output_path: topolvm/
       # Helmchart
       - input_paths:
-          - topolvm/helmcharts/topolvm/
+          - topolvm/helmcharts/topolvm/${topolvm:charts:topolvm}/templates/lvmd/configmap.yaml
+          - topolvm/helmcharts/topolvm/${topolvm:charts:topolvm}/templates/lvmd/daemonset.yaml
+          - topolvm/helmcharts/topolvm/${topolvm:charts:topolvm}/templates/storageclass.yaml
+        input_type: remove
+        ignore_missing: true
+        output_path: .
+      - input_paths:
+          - topolvm/helmcharts/topolvm/${topolvm:charts:topolvm}
         input_type: helm
         output_path: topolvm/10_helmchart
         helm_values: ${topolvm:helmValues}
