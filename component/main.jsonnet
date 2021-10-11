@@ -143,23 +143,11 @@ local StorageClass(name='ssd-local') = sc.storageClass(name) {
   [if std.objectHas(params.storageclasses[name], 'retainpolicy') then 'reclaimPolicy']: params.storageclasses[name].retainpolicy,
 };
 
-local PriorityClass(name='topolvm') = {
-  apiVersion: 'scheduling.k8s.io/v1',
-  kind: 'PriorityClass',
-  metadata: {
-    name: name,
-  },
-  value: 1000000,
-  globalDefault: false,
-  description: 'Pods using TopoLVM volumes should use this class.',
-};
-
 // Define outputs below
 {
   '00_namespace': namespace,
   '11_lvmd_configmap': lvmd_configmap,
   '12_lvmd_daemonset': lvmd_daemonset,
-  '21_priority_class': PriorityClass(),
   '22_storage_classes': [
     StorageClass(name)
     for name in std.objectFields(params.storageclasses)
