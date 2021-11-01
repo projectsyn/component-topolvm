@@ -1,10 +1,10 @@
 parameters:
   kapitan:
     dependencies:
-      - type: git
-        source: https://github.com/topolvm/topolvm
-        ref: ${topolvm:charts:topolvm}
-        subdir: charts/topolvm
+      - type: helm
+        source: https://topolvm.github.io/topolvm
+        chart_name: topolvm
+        version: ${topolvm:charts:topolvm}
         output_path: dependencies/topolvm/helmcharts/topolvm/${topolvm:charts:topolvm}/
     compile:
       # ArgoCD App
