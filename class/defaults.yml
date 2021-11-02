@@ -4,13 +4,13 @@ parameters:
     namespace: syn-topolvm
 
     charts:
-      topolvm: v3.1.1
+      topolvm: v3.1.2
 
     images:
       topolvm:
         registry: quay.io
         repository: topolvm/topolvm-with-sidecar
-        tag: 0.10.1
+        tag: 0.10.2
 
     deviceclasses:
       ssd:
