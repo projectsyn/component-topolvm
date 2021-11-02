@@ -4,7 +4,7 @@ parameters:
     namespace: syn-topolvm
 
     charts:
-      topolvm: topolvm-chart-v3.1.1
+      topolvm: v3.1.1
 
     images:
       topolvm:
