@@ -70,6 +70,11 @@ parameters:
         enabled: false
         # scheduler.resources -- Specify resources on the TopoLVM scheduler extender container.
         resources: ${topolvm:resources:scheduler}
+        podDisruptionBudget:
+          # Only configure scheduler PDB if the scheduler is actually enabled.
+          # Otherwise we get unnecessary alert noise for the PDB because no
+          # scheduler pods are running.
+          enabled: ${topolvm:helmValues:scheduler:enabled}
 
       # lvmd service
       lvmd:
