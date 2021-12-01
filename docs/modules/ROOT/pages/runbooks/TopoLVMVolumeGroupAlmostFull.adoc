@@ -1,0 +1,15 @@
+= Alert rule: TopoLVMVolumeGroupNearFull
+
+include::partial$runbooks/contribution_note.adoc[]
+
+== icon:glasses[] Overview
+
+This alert fires when the utilization of a TopoLVM volume group is higher than 95% of its capacity.
+To resolve this alert, unused pv should be deleted or the volume group size must be increased.
+
+Otherwise, investigate if this node has logical volumes not associated with a persistent volume.
+
+
+== icon:bug[] Steps for debugging
+
+include::partial$runbooks/lingering_volumes.adoc[]

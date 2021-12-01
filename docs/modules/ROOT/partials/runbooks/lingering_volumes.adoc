@@ -1,0 +1,25 @@
+=== Check for lingering volumes
+
+Check if there are `logicalvolumes` that aren't associated with a `persistentvolume`.
+
+[source,console,subs="+attributes"]
+----
+$ diff -y <(k get logicalvolumes -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}') <(k get pv -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}')
+                                                                > local-pv-14024b59 <1>
+                                                                > local-pv-23eec265 <1>
+                                                                > local-pv-9ae3e5a  <1>
+  pvc-379faad7-edf7-4cbd-81e0-08d0f2207c36                        pvc-379faad7-edf7-4cbd-81e0-08d0f2207c36
+  pvc-3a4e6c1b-b2c3-4cbe-a2a9-e6418ad8bcef                        pvc-3a4e6c1b-b2c3-4cbe-a2a9-e6418ad8bcef
+  pvc-3fc91fd8-aeff-4adb-8135-327302dbc777                        pvc-3fc91fd8-aeff-4adb-8135-327302dbc777
+                                                                > pvc-05089699-18eb-4959-83ee-f35bd9f2d7e2 <2>
+  pvc-46411d9f-9bac-43fb-8bd5-583c2a7c5703                        pvc-46411d9f-9bac-43fb-8bd5-583c2a7c5703
+  pvc-481d306b-5681-4e59-904b-6956192a4622                        pvc-481d306b-5681-4e59-904b-6956192a4622
+> pvc-d93cd532-2c12-4864-a826-df8a5359daf9  <3>
+  pvc-4c44f64a-287b-4123-abb9-39e76e8eb25e                        pvc-4c44f64a-287b-4123-abb9-39e76e8eb25e
+[ ... remaining output omitted ... ]
+----
+<1> `local-pv-*` are from the Openshift Local Storage Operator (usually created by rook-ceph cluster)
+<2> PV only listed on the "right" side are from non-TopoLVM storage classes.
+<3> PV only listed on the "left" side are logical volumes that aren't associated with a persistent volume anymore.
+
+Unassociated `logicalvolumes` <3> might be deleted, best to check with customer first.

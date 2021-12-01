@@ -26,6 +26,10 @@ parameters:
           - topolvm/component/ocpscc.jsonnet
         input_type: jsonnet
         output_path: topolvm/
+      - input_paths:
+          - topolvm/component/alertrules.jsonnet
+        input_type: jsonnet
+        output_path: topolvm/
       # Helmchart
       - input_paths:
           - topolvm/helmcharts/topolvm/${topolvm:charts:topolvm}/templates/lvmd/configmap.yaml
