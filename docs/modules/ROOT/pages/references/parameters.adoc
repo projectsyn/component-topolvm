@@ -21,7 +21,7 @@ default::
 topolvm:
   registry: quay.io
   repository: topolvm/topolvm-with-sidecar
-  tag: 0.10.2
+  tag: 0.10.3
 ----
 
 This configuration shouldn't be touched and will be updated with future releases of this component.

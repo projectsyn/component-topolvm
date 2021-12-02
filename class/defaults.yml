@@ -6,13 +6,13 @@ parameters:
     ignore_alerts: []
 
     charts:
-      topolvm: v3.1.2
+      topolvm: v3.2.0
 
     images:
       topolvm:
         registry: quay.io
         repository: topolvm/topolvm-with-sidecar
-        tag: 0.10.2
+        tag: 0.10.3
 
     deviceclasses:
       ssd:
