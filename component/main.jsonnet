@@ -14,6 +14,9 @@ local namespace = kube.Namespace(params.namespace) {
     labels+: {
       'app.kubernetes.io/name': params.namespace,
       'topolvm.cybozu.com/webhook': 'ignore',
+      // Configure the namespaces so that the OCP4 cluster-monitoring
+      // Prometheus can find the servicemonitors and rules.
+      'openshift.io/cluster-monitoring': 'true',
     },
   },
 };
