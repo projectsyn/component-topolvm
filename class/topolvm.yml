@@ -12,11 +12,6 @@ parameters:
           - topolvm/component/app.jsonnet
         input_type: jsonnet
         output_path: apps/
-      # CRDs
-      - input_paths:
-          - topolvm/helmcharts/topolvm/${topolvm:charts:topolvm}/crds
-        input_type: copy
-        output_path: topolvm/
       # Custom Manifests
       - input_paths:
           - topolvm/component/main.jsonnet
