@@ -2,11 +2,14 @@ local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
 local inv = kap.inventory();
-local params = inv.parameters.openshift4_logging;
+local params = inv.parameters.cert_exporter;
+
+local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
 
 assert
+  std.member(inv.applications, 'rancher-monitoring') ||
   std.member(inv.applications, 'openshift4-monitoring')
-  : 'openshift4-monitoring is not available';
+  : 'Neither rancher-monitoring nor openshift4-monitoring is available';
 
 // Function to process an array which supports removing previously added
 // elements by prefixing them with ~
@@ -31,26 +34,11 @@ local render_array(arr) =
     std.objectFields(val_state)
   );
 
-// Keep only alerts from params.ignore_alerts for which the last
-// array entry wasn't prefixed with `~`.
-local user_ignore_alerts = render_array(params.ignore_alerts);
-
 // Upstream alerts to ignore
 local ignore_alerts = std.set(
-  // Add set of upstream alerts that should be ignored from processed value of
-  // `params.ignore_alerts`
-  user_ignore_alerts
+  // Add set of alerts that should be ignored from `params.ignore_alerts`
+  render_array(params.ignore_alerts)
 );
-
-// Alert rule patches.
-// Provide partial objects for alert rules that need to be tuned compared to
-// upstream. The keys in this object correspond to the `alert` field of the
-// rule for which the patch is intended.
-local patch_alerts = {
-  FluentdQueueLengthIncreasing: {
-    'for': '12h',
-  },
-};
 
 /* FROM HERE: should be provided as library function by
  * rancher-/openshift4-monitoring */
@@ -59,47 +47,80 @@ local patch_alerts = {
 // reuse their functionality as a black box to make sure our alerts work
 // correctly in the environment into which we're deploying.
 
-local global_alert_params = inv.parameters.openshift4_monitoring.alerts;
+local global_alert_params =
+  if isOpenshift then
+    inv.parameters.openshift4_monitoring.alerts
+  else
+    inv.parameters.rancher_monitoring.alerts;
 
 local filter_patch_rules(g) =
   // combine our set of alerts to ignore with the monitoring component's
   // set of ignoreNames.
   local ignore_set = std.set(global_alert_params.ignoreNames + ignore_alerts);
   g {
-    rules: std.map(
-      // Patch rules to make sure they match the requirements.
+    rules: std.filter(
+      // Filter out unwanted rules
       function(rule)
-        local rulepatch = com.getValueOrDefault(patch_alerts, rule.alert, {});
-        rule {
-          // Change alert names so we don't get multiple alerts with the same
-          // name, as the logging operator deploys its own copy of these
-          // rules.
-          alert: 'SYN_%s' % super.alert,
-          labels+: {
-            syn: 'true',
-            // mark alert as belonging to topolvm
-            // can be used for inhibition rules
-            syn_component: 'topolvm',
-          },
-        } + rulepatch,
-      std.filter(
-        // Filter out unwanted rules
-        function(rule)
-          // only create duplicates of alert rules, we can use the recording
-          // rules which are deployed anyway when we enable monitoring on the
-          // CephCluster resource.
-          std.objectHas(rule, 'alert') &&
-          // Drop rules which are in the ignore_set
-          !std.member(ignore_set, rule.alert),
-        super.rules
-      ),
+        // Drop rules which are in the ignore_set
+        !std.member(ignore_set, rule.alert),
+      super.rules
     ),
   };
 
 /* TO HERE */
 
+local alertrules = {
+  groups: [
+    {
+      name: 'topolvm-alert.rules',
+      rules: [
+        {
+          alert: 'SYN_TopoLVMVolumeGroupAlmostFull',
+          annotations: {
+            description: |||
+              Utilization of volume group {{ $labels.device_class }}
+              has crossed 95% on host {{ $labels.node }}.
+            |||,
+            message: 'LVM volume group is almost full.',
+            runbook_url: 'https://hub.syn.tools/topolvm/runbooks/TopoLVMVolumeGroupAlmostFull.html',
+            severity_level: 'warning',
+            storage_type: 'topolvm',
+          },
+          expr: '(topolvm_volumegroup_available_bytes / topolvm_volumegroup_size_bytes) >= 0.95',
+          'for': '10m',
+          labels: {
+            severity: 'warning',
+            syn: 'true',
+            syn_component: 'topolvm',
+          },
+        },
+        {
+          alert: 'SYN_TopoLVMVolumeGroupNearFull',
+          annotations: {
+            description: |||
+              Utilization of volume group {{ $labels.device_class }}
+              has crossed 85% on host {{ $labels.node }}.
+            |||,
+            message: 'LVM volume group is nearing full.',
+            runbook_url: 'https://hub.syn.tools/topolvm/runbooks/TopoLVMVolumeGroupNearFull.html',
+            severity_level: 'warning',
+            storage_type: 'topolvm',
+          },
+          expr: '(topolvm_volumegroup_available_bytes / topolvm_volumegroup_size_bytes) >= 0.85',
+          'for': '1h',
+          labels: {
+            severity: 'warning',
+            syn: 'true',
+            syn_component: 'topolvm',
+          },
+        },
+      ],
+    },
+  ],
+};
+
 {
-  rules: kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'syn-topolvm-rules') {
+  '20_rules': kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'syn-topolvm-rules') {
     metadata+: {
       namespace: params.namespace,
     },
@@ -109,7 +130,7 @@ local filter_patch_rules(g) =
         [
           local r = filter_patch_rules(g);
           if std.length(r.rules) > 0 then r
-          for g in std.parseJson(kap.yaml_load_stream('topolvm/component/topolvm_alerts.yaml'))[0].groups
+          for g in alertrules.groups
         ]
       ),
     },
