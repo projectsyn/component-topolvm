@@ -86,7 +86,7 @@ local alertrules = {
             severity_level: 'warning',
             storage_type: 'topolvm',
           },
-          expr: '(topolvm_volumegroup_available_bytes / topolvm_volumegroup_size_bytes) >= 0.95',
+          expr: '(topolvm_volumegroup_available_bytes / topolvm_volumegroup_size_bytes) <= 0.05',
           'for': '10m',
           labels: {
             severity: 'warning',
@@ -106,7 +106,7 @@ local alertrules = {
             severity_level: 'warning',
             storage_type: 'topolvm',
           },
-          expr: '(topolvm_volumegroup_available_bytes / topolvm_volumegroup_size_bytes) >= 0.85',
+          expr: '(topolvm_volumegroup_available_bytes / topolvm_volumegroup_size_bytes) <= 0.15',
           'for': '1h',
           labels: {
             severity: 'warning',
