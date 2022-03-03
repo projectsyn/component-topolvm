@@ -6,25 +6,19 @@ parameters:
     ignore_alerts: []
 
     charts:
-      topolvm: v4.0.0
+      topolvm:
+        source: https://topolvm.github.io/topolvm
+        version: v4.0.2
 
     images:
       topolvm:
         registry: quay.io
         repository: topolvm/topolvm-with-sidecar
-        tag: 0.10.4
+        tag: 0.10.6
 
-    deviceclasses:
-      ssd:
-        volume-group: vgssd
-        spare-gb: 10
-        default: true
+    deviceclasses: []
 
-    storageclasses:
-      ssd-local:
-        class: ssd
-        fstype: ext4
-        volumeexpansion: true
+    storageclasses: {}
 
     # Resource limits
     resources:
@@ -57,7 +51,7 @@ parameters:
           memory: 200Mi
           cpu: 200m
 
-    helmValues:
+    helm_values:
       image:
         # image.repository -- TopoLVM image repository to use.
         repository: ${topolvm:images:topolvm:registry}/${topolvm:images:topolvm:repository}
@@ -76,7 +70,7 @@ parameters:
           # Only configure scheduler PDB if the scheduler is actually enabled.
           # Otherwise we get unnecessary alert noise for the PDB because no
           # scheduler pods are running.
-          enabled: ${topolvm:helmValues:scheduler:enabled}
+          enabled: ${topolvm:helm_values:scheduler:enabled}
 
       # lvmd service
       lvmd:
@@ -84,6 +78,14 @@ parameters:
         managed: true
         # lvmd.resources -- Specify resources.
         resources: ${topolvm:resources:lvmd}
+        # lvmd.deviceClasses -- Specify the device-class settings.
+        deviceClasses: ${topolvm:deviceclasses}
+        # lvmd.nodeSelector -- Specify nodeSelector.
+        nodeSelector:
+          syn.tools/topolvm: ""
+
+      # storageClasses -- Whether to create storageclass(s)
+      storageClasses: []
 
       # CSI node service
       node:

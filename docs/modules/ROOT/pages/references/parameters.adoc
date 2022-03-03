@@ -14,38 +14,9 @@ The namespace in which to deploy this component.
 
 [horizontal]
 type:: list
-default::
-+
-[source,yaml]
-----
-ssd:
-  volume-group: vgssd
-  spare-gb: 10
-  default: true
-----
+default:: []
 
-Each key represents a different device class.
-
-=== `volume-group`
-
-[horizontal]
-type:: string
-
-Name of the LVM volumegroup to be used by this device class.
-
-=== `spare-gb`
-
-[horizontal]
-type:: integer
-
-This amount of space will be reserved on the volumegroup and not allocated or reported as free by TopoLVM.
-
-=== `default`
-
-[horizontal]
-type:: string
-
-If the storage class has no special parameter set, this device class will be used. However, one device class must be set as default.
+See https://github.com/topolvm/topolvm/blob/main/docs/lvmd.md[LVMD Documentation].
 
 === Example
 
@@ -54,11 +25,11 @@ If the storage class has no special parameter set, this device class will be use
 parameters:
   topolvm:
     deviceclasses:
-      ssd:
+      - name: ssd
         volume-group: vgssd
         spare-gb: 1
         default: true
-      hdd:
+      - name: hdd
         volume-group: vghdd
         spare-gb: 5
         default: false
@@ -68,15 +39,7 @@ parameters:
 
 [horizontal]
 type:: dictionary
-default::
-+
-[source,yaml]
-----
-ssd-local:
-  class: ssd
-  fstype: ext4
-  volumeexpansion: true
-----
+default:: {}
 
 Each key represents a different storage class.
 
@@ -141,7 +104,7 @@ Values passed to Helm. See https://github.com/topolvm/topolvm/blob/main/charts/t
 parameters:
   topolvm:
     deviceclasses:
-      ssd:
+      - name: ssd
         volume-group: vgssd
         spare-gb: 10
         default: true

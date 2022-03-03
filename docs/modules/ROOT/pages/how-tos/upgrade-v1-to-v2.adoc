@@ -1,0 +1,32 @@
+= Upgrade from v1 to v2
+
+With the recent update of Kapitan, Helm 3 charts can be used. Therefor the need for the custom lvmd daemonset is gone.
+Therefor a minor change in the `deviceclasses` parameter is necessary.
+
+== Update component parameters
+
+Change `deviceclasses` from `dictionary` to `array`:
+
+[source,bash]
+----
+parameters:
+  topolvm:
+    deviceclasses:
+      ssd: <1>
+        volume-group: vgssd
+        default: true
+        spare-gb: 10
+----
+<1> Change this line to `- name: ssd`.
+
+Example for v2:
+[source,bash]
+----
+parameters:
+  topolvm:
+    deviceclasses:
+      - name: ssd
+        volume-group: vgssd
+        default: true
+        spare-gb: 10
+----

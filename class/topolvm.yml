@@ -2,10 +2,10 @@ parameters:
   kapitan:
     dependencies:
       - type: helm
-        source: https://topolvm.github.io/topolvm
+        source: ${topolvm:charts:topolvm:source}
         chart_name: topolvm
-        version: ${topolvm:charts:topolvm}
-        output_path: dependencies/topolvm/helmcharts/topolvm/${topolvm:charts:topolvm}/
+        version: ${topolvm:charts:topolvm:version}
+        output_path: dependencies/topolvm/helmcharts/topolvm/${topolvm:charts:topolvm:version}/
     compile:
       # ArgoCD App
       - input_paths:
@@ -27,17 +27,10 @@ parameters:
         output_path: topolvm/
       # Helmchart
       - input_paths:
-          - topolvm/helmcharts/topolvm/${topolvm:charts:topolvm}/templates/lvmd/configmap.yaml
-          - topolvm/helmcharts/topolvm/${topolvm:charts:topolvm}/templates/lvmd/daemonset.yaml
-          - topolvm/helmcharts/topolvm/${topolvm:charts:topolvm}/templates/storageclass.yaml
-        input_type: remove
-        ignore_missing: true
-        output_path: .
-      - input_paths:
-          - topolvm/helmcharts/topolvm/${topolvm:charts:topolvm}
+          - topolvm/helmcharts/topolvm/${topolvm:charts:topolvm:version}
         input_type: helm
         output_path: topolvm/10_helmchart
-        helm_values: ${topolvm:helmValues}
+        helm_values: ${topolvm:helm_values}
         helm_params:
           release_name: topolvm
           namespace: ${topolvm:namespace}
