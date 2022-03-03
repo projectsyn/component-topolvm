@@ -66,5 +66,5 @@ local openshiftScc = {
 
 // Define outputs below
 {
-  [if isOpenshift then '01-openshift-scc']: openshiftScc,
+  [if isOpenshift then '01_openshift-scc']: openshiftScc,
 }

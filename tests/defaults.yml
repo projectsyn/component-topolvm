@@ -1,3 +1,15 @@
 # Overwrite parameters here
 
-# parameters: {...}
+# parameters:
+#   topolvm:
+#     deviceclasses:
+#       - name: ssd
+#         volume-group: vgssd
+#         default: true
+#         spare-gb: 10
+
+#     storageclasses:
+#       ssd-local:
+#         class: ssd
+#         fstype: ext4
+#         volumeexpansion: true
