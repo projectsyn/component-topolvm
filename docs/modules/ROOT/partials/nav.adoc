@@ -1,5 +1,9 @@
 * xref:index.adoc[Home]
 
+.How-tos
+
+* xref:how-tos/upgrade-v1-to-v2.adoc[Upgrade v1 to v2]
+
 .Alert runbooks
 
 * xref:runbooks/TopoLVMVolumeGroupAlmostFull.adoc[TopoLVMVolumeGroupAlmostFull]
