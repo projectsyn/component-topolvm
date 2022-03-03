@@ -5,7 +5,7 @@ Therefor a minor change in the `deviceclasses` parameter is necessary.
 
 == Update component parameters
 
-Change `deviceclasses` from `dictionary` to `array`
+Change `deviceclasses` from `dictionary` to `array`:
 
 [source,bash]
 ----

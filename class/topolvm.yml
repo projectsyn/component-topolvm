@@ -5,7 +5,7 @@ parameters:
         source: ${topolvm:charts:topolvm:source}
         chart_name: topolvm
         version: ${topolvm:charts:topolvm:version}
-        output_path: dependencies/topolvm/helmcharts/topolvm/${topolvm:charts:topolvm:version}
+        output_path: dependencies/topolvm/helmcharts/topolvm/${topolvm:charts:topolvm:version}/
     compile:
       # ArgoCD App
       - input_paths:
