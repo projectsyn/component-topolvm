@@ -12,7 +12,7 @@ parameters:
       topolvm:
         registry: quay.io
         repository: topolvm/topolvm-with-sidecar
-        tag: 0.10.4
+        tag: 0.10.6
 
     deviceclasses:
       ssd:
