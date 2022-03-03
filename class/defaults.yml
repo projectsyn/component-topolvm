@@ -6,7 +6,7 @@ parameters:
     ignore_alerts: []
 
     charts:
-      topolvm: v4.0.0
+      topolvm: 4.0.2
 
     images:
       topolvm:
