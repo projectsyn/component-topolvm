@@ -14,7 +14,7 @@ parameters:
       topolvm:
         registry: quay.io
         repository: topolvm/topolvm-with-sidecar
-        tag: 0.10.6
+        tag: 0.11.0
 
     deviceclasses: []
 
