@@ -1,0 +1,19 @@
+= Upgrade from v2 to v3
+
+TopoLVM images > 0.11 are no longer available on quay.io, you may need to change firewall rules to get the images from ghcr.io.
+
+The labels have changed of the deployments and daemon sets, plus the anti-affinity rules for the TopoLVM controller. Therefor you need to delete the existing deployments and daemonsets.
+
+== Delete Deployments / Daemonsets after Upgrade
+
+Delete Deployments:
+
+[source,bash]
+----
+export topolvm_ns=syn-topolvm <1>
+
+kubectl -n ${topolvm_ns} delete deploy topolvm-controller
+kubectl -n ${topolvm_ns} delete ds topolvm-lvmd-0
+kubectl -n ${topolvm_ns} delete ds topolvm-node
+----
+<1> Change this if not using component defaults.
