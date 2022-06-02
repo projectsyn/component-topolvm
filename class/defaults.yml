@@ -8,13 +8,13 @@ parameters:
     charts:
       topolvm:
         source: https://topolvm.github.io/topolvm
-        version: v5.0.0
+        version: v6.0.0
 
     images:
       topolvm:
-        registry: quay.io
+        registry: ghcr.io
         repository: topolvm/topolvm-with-sidecar
-        tag: 0.11.0
+        tag: 0.11.1
 
     deviceclasses: []
 
