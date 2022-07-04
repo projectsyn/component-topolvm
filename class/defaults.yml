@@ -10,12 +10,6 @@ parameters:
         source: https://topolvm.github.io/topolvm
         version: v8.0.0
 
-    images:
-      topolvm:
-        registry: ghcr.io
-        repository: topolvm/topolvm-with-sidecar
-        tag: 0.14.0
-
     deviceclasses: []
 
     storageclasses: {}
@@ -53,10 +47,6 @@ parameters:
 
     helm_values:
       image:
-        # image.repository -- TopoLVM image repository to use.
-        repository: ${topolvm:images:topolvm:registry}/${topolvm:images:topolvm:repository}
-        # image.tag -- TopoLVM image tag to use.
-        tag: ${topolvm:images:topolvm:tag}
         # image.pullPolicy -- TopoLVM image pullPolicy.
         pullPolicy: IfNotPresent
 
