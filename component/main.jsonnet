@@ -26,7 +26,6 @@ local StorageClass(name='ssd-local') = sc.storageClass(name) {
     labels+: {
       'app.kubernetes.io/name': 'topolvm',
       'app.kubernetes.io/instance': 'topolvm',
-      'app.kubernetes.io/version': params.images.topolvm.tag,
     },
   },
   allowVolumeExpansion: params.storageclasses[name].volumeexpansion,
