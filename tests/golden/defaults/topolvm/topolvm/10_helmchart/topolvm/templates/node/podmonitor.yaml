@@ -1,0 +1,23 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  labels:
+    app.kubernetes.io/instance: topolvm
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: topolvm
+    app.kubernetes.io/version: 0.15.1
+    helm.sh/chart: topolvm-9.0.1
+  name: topolvm-node
+  namespace: syn-topolvm
+spec:
+  namespaceSelector:
+    matchNames:
+      - syn-topolvm
+  podMetricsEndpoints:
+    - path: /metrics
+      port: metrics
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: node
+      app.kubernetes.io/instance: topolvm
+      app.kubernetes.io/name: topolvm

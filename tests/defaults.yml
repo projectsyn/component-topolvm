@@ -1,15 +1,22 @@
-# Overwrite parameters here
+applications:
+  - openshift4-monitoring
+  - storageclass
 
-# parameters:
-#   topolvm:
-#     deviceclasses:
-#       - name: ssd
-#         volume-group: vgssd
-#         default: true
-#         spare-gb: 10
+parameters:
+  kapitan:
+    dependencies:
+      - type: https
+        source: https://raw.githubusercontent.com/projectsyn/component-storageclass/v1.0.0/lib/storageclass.libsonnet
+        output_path: vendor/lib/storageclass.libsonnet
 
-#     storageclasses:
-#       ssd-local:
-#         class: ssd
-#         fstype: ext4
-#         volumeexpansion: true
+  facts:
+    distribution: openshift4
+
+  openshift4_monitoring:
+    alerts:
+      ignoreNames: []
+      customAnnotations: {}
+
+  storageclass:
+    defaults: {}
+    defaultClass: ""
