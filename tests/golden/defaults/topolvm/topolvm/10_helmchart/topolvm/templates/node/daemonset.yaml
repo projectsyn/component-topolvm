@@ -1,0 +1,134 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app.kubernetes.io/instance: topolvm
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: topolvm
+    app.kubernetes.io/version: 0.15.1
+    helm.sh/chart: topolvm-9.0.1
+  name: topolvm-node
+  namespace: syn-topolvm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: node
+      app.kubernetes.io/instance: topolvm
+      app.kubernetes.io/name: topolvm
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: metrics
+        prometheus.io/scrape: 'true'
+      labels:
+        app.kubernetes.io/component: node
+        app.kubernetes.io/instance: topolvm
+        app.kubernetes.io/name: topolvm
+    spec:
+      containers:
+        - command:
+            - /topolvm-node
+            - --csi-socket=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
+            - --lvmd-socket=/run/topolvm/lvmd.sock
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.15.1
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: healthz
+            initialDelaySeconds: 10
+            periodSeconds: 60
+            timeoutSeconds: 3
+          name: topolvm-node
+          ports:
+            - containerPort: 9808
+              name: healthz
+              protocol: TCP
+            - containerPort: 8080
+              name: metrics
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 500m
+              memory: 500Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /var/lib/kubelet/plugins/topolvm.cybozu.com/node/
+              name: node-plugin-dir
+            - mountPath: /run/topolvm
+              name: lvmd-socket-dir
+            - mountPath: /var/lib/kubelet/pods
+              mountPropagation: Bidirectional
+              name: pod-volumes-dir
+            - mountPath: /var/lib/kubelet/plugins/kubernetes.io/csi
+              mountPropagation: Bidirectional
+              name: csi-plugin-dir
+        - command:
+            - /csi-node-driver-registrar
+            - --csi-address=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
+            - --kubelet-registration-path=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.15.1
+          imagePullPolicy: IfNotPresent
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - rm -rf /registration/topolvm.cybozu.com /registration/topolvm.cybozu.com-reg.sock
+          livenessProbe:
+            exec:
+              command:
+                - /csi-node-driver-registrar
+                - --kubelet-registration-path=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
+                - --mode=kubelet-registration-probe
+            initialDelaySeconds: 3
+          name: csi-registrar
+          volumeMounts:
+            - mountPath: /var/lib/kubelet/plugins/topolvm.cybozu.com/node/
+              name: node-plugin-dir
+            - mountPath: /registration
+              name: registration-dir
+        - command:
+            - /livenessprobe
+            - --csi-address=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.15.1
+          imagePullPolicy: IfNotPresent
+          name: liveness-probe
+          volumeMounts:
+            - mountPath: /var/lib/kubelet/plugins/topolvm.cybozu.com/node/
+              name: node-plugin-dir
+      nodeSelector:
+        syn.tools/topolvm: ''
+      serviceAccountName: topolvm-node
+      volumes:
+        - hostPath:
+            path: /var/lib/kubelet/plugins_registry/
+            type: Directory
+          name: registration-dir
+        - hostPath:
+            path: /var/lib/kubelet/plugins/topolvm.cybozu.com/node
+            type: DirectoryOrCreate
+          name: node-plugin-dir
+        - hostPath:
+            path: /var/lib/kubelet/plugins/kubernetes.io/csi
+            type: DirectoryOrCreate
+          name: csi-plugin-dir
+        - hostPath:
+            path: /var/lib/kubelet/pods/
+            type: DirectoryOrCreate
+          name: pod-volumes-dir
+        - hostPath:
+            path: /run/topolvm
+            type: Directory
+          name: lvmd-socket-dir
