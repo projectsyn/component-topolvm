@@ -110,3 +110,7 @@ parameters:
         podMutatingWebhook:
           # webhook.podMutatingWebhook.enabled -- Enable Pod MutatingWebhook.
           enabled: false
+      podSecurityPolicy:
+        # podSecurityPolicy.create -- Enable pod security policy.
+        # Deprecated in v1.21
+        create: false
