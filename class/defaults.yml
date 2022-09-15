@@ -112,5 +112,5 @@ parameters:
           enabled: false
       podSecurityPolicy:
         # podSecurityPolicy.create -- Enable pod security policy.
-        # Deprecated in v1.21
+        # Deprecated in Kubernetes v1.21
         create: false
