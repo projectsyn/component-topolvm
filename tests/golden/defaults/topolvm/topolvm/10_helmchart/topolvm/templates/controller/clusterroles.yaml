@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.15.1
-    helm.sh/chart: topolvm-9.0.1
+    app.kubernetes.io/version: 0.15.2
+    helm.sh/chart: topolvm-9.1.0
   name: syn-topolvm:controller
 rules:
   - apiGroups:
@@ -68,8 +68,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.15.1
-    helm.sh/chart: topolvm-9.0.1
+    app.kubernetes.io/version: 0.15.2
+    helm.sh/chart: topolvm-9.1.0
   name: topolvm-external-provisioner-runner
 rules:
   - apiGroups:
@@ -155,8 +155,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.15.1
-    helm.sh/chart: topolvm-9.0.1
+    app.kubernetes.io/version: 0.15.2
+    helm.sh/chart: topolvm-9.1.0
   name: topolvm-external-resizer-runner
 rules:
   - apiGroups:
@@ -208,8 +208,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.15.1
-    helm.sh/chart: topolvm-9.0.1
+    app.kubernetes.io/version: 0.15.2
+    helm.sh/chart: topolvm-9.1.0
   name: topolvm-external-snapshotter-runner
 rules:
   - apiGroups:
