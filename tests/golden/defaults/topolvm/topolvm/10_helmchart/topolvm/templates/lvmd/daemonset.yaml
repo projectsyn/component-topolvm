@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.15.1
-    helm.sh/chart: topolvm-9.0.1
+    app.kubernetes.io/version: 0.15.2
+    helm.sh/chart: topolvm-9.1.0
     idx: '0'
   name: topolvm-lvmd-0
   namespace: syn-topolvm
@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 9ac325945bffd8e5f397c336b3e28d32117bf6ac00175990b506f47f1484b11c
+        checksum/config: e44bd5422858f9173782da9f87f0507ebaf2ff9a7e9147e01b4d5eaa0d3ad606
         prometheus.io/port: metrics
         prometheus.io/scrape: 'true'
       labels:
@@ -33,7 +33,7 @@ spec:
         - command:
             - /lvmd
             - --container
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.15.1
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.15.2
           name: lvmd
           resources:
             limits:
