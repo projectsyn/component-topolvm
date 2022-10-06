@@ -1,16 +1,19 @@
-#
-# File managed by ModuleSync - Do Not Edit
-#
-# Additional Makefiles can be added to `.sync.yml` in 'Makefile.includes'
-#
+# The component name is hard-coded from the template
+COMPONENT_NAME ?= topolvm
 
-# Commodore takes the root dir name as the component name
-COMPONENT_NAME ?= $(shell basename ${PWD} | sed s/component-//)
-
+git_dir         ?= $(shell git rev-parse --git-common-dir)
 compiled_path   ?= compiled/$(COMPONENT_NAME)/$(COMPONENT_NAME)
 root_volume     ?= -v "$${PWD}:/$(COMPONENT_NAME)"
 compiled_volume ?= -v "$${PWD}/$(compiled_path):/$(COMPONENT_NAME)"
-commodore_args  ?= --search-paths ./dependencies --search-paths .
+commodore_args  ?= --search-paths . -n $(COMPONENT_NAME)
+
+ifneq "$(git_dir)" ".git"
+	git_volume        ?= -v "$(git_dir):$(git_dir):ro"
+	antora_git_volume ?= -v "$(git_dir):/preview/antora/.git:ro"
+else
+	git_volume        ?=
+	antora_git_volume ?= -v "${PWD}/.git:/preview/antora/.git:ro"
+endif
 
 ifneq "$(shell which docker 2>/dev/null)" ""
 	DOCKER_CMD    ?= $(shell which docker)
@@ -34,10 +37,18 @@ YAMLLINT_DOCKER ?= $(DOCKER_CMD) $(DOCKER_ARGS) $(root_volume) $(YAMLLINT_IMAGE)
 VALE_CMD  ?= $(DOCKER_CMD) $(DOCKER_ARGS) $(root_volume) --volume "$${PWD}"/docs/modules:/pages docker.io/vshn/vale:2.1.1
 VALE_ARGS ?= --minAlertLevel=error --config=/pages/ROOT/pages/.vale.ini /pages
 
-ANTORA_PREVIEW_CMD ?= $(DOCKER_CMD) run --rm --publish 35729:35729 --publish 2020:2020 --volume "${PWD}/.git":/preview/antora/.git --volume "${PWD}/docs":/preview/antora/docs docker.io/vshn/antora-preview:3.0.1.1 --style=syn --antora=docs
+ANTORA_PREVIEW_CMD ?= $(DOCKER_CMD) run --rm --publish 35729:35729 --publish 2020:2020 $(antora_git_volume) --volume "${PWD}/docs":/preview/antora/docs docker.io/vshn/antora-preview:3.0.1.1 --style=syn --antora=docs
 
-COMMODORE_CMD  ?= $(DOCKER_CMD) $(DOCKER_ARGS) $(root_volume) docker.io/projectsyn/commodore:latest
+COMMODORE_CMD  ?= $(DOCKER_CMD) $(DOCKER_ARGS) $(git_volume) $(root_volume) docker.io/projectsyn/commodore:latest
 COMPILE_CMD    ?= $(COMMODORE_CMD) component compile . $(commodore_args)
 JB_CMD         ?= $(DOCKER_CMD) $(DOCKER_ARGS) --entrypoint /usr/local/bin/jb docker.io/projectsyn/commodore:latest install
+GOLDEN_FILES    ?= $(shell find tests/golden/$(instance) -type f)
+
+KUBENT_FILES    ?= $(shell echo "$(GOLDEN_FILES)" | sed 's/ /,/g')
+KUBENT_ARGS     ?= -c=false --helm2=false --helm3=false -e
+# Use our own kubent image until the upstream image is available
+KUBENT_IMAGE    ?= docker.io/projectsyn/kubent:latest
+KUBENT_DOCKER   ?= $(DOCKER_CMD) $(DOCKER_ARGS) $(root_volume) --entrypoint=/app/kubent $(KUBENT_IMAGE)
 
 instance ?= defaults
+test_instances = tests/defaults.yml tests/full.yml
