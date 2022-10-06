@@ -1,0 +1,25 @@
+{
+  "template": "https://github.com/projectsyn/commodore-component-template.git",
+  "commit": "5911298a6b15ad810606d500e9eb7aee6157f64b",
+  "checkout": "main",
+  "context": {
+    "cookiecutter": {
+      "name": "TopoLVM",
+      "slug": "topolvm",
+      "parameter_key": "topolvm",
+      "test_cases": "defaults",
+      "add_lib": "n",
+      "add_pp": "n",
+      "add_golden": "y",
+      "add_matrix": "y",
+      "add_go_unit": "n",
+      "copyright_holder": "VSHN AG <info@vshn.ch>",
+      "copyright_year": "2022",
+      "github_owner": "projectsyn",
+      "github_name": "component-topolvm",
+      "github_url": "https://github.com/projectsyn/component-topolvm",
+      "_template": "https://github.com/projectsyn/commodore-component-template.git"
+    }
+  },
+  "directory": null
+}
