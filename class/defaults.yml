@@ -8,7 +8,7 @@ parameters:
     charts:
       topolvm:
         source: https://topolvm.github.io/topolvm
-        version: 9.1.0
+        version: 10.0.0
 
     deviceclasses: []
 
@@ -54,8 +54,6 @@ parameters:
       scheduler:
         # scheduler.enabled --  If true, enable scheduler extender for TopoLVM
         enabled: false
-        # scheduler.resources -- Specify resources on the TopoLVM scheduler extender container.
-        resources: ${topolvm:resources:scheduler}
         podDisruptionBudget:
           # Only configure scheduler PDB if the scheduler is actually enabled.
           # Otherwise we get unnecessary alert noise for the PDB because no
@@ -66,8 +64,6 @@ parameters:
       lvmd:
         # lvmd.managed -- If true, set up lvmd service with DaemonSet.
         managed: true
-        # lvmd.resources -- Specify resources.
-        resources: ${topolvm:resources:lvmd}
         # lvmd.deviceClasses -- Specify the device-class settings.
         deviceClasses: ${topolvm:deviceclasses}
         # lvmd.nodeSelector -- Specify nodeSelector.
@@ -82,8 +78,6 @@ parameters:
         # node.nodeSelector -- Specify nodeSelector.
         nodeSelector:
           syn.tools/topolvm: ""
-        # node.resources -- Specify resources.
-        resources: ${topolvm:resources:node}
         metrics:
           # node.metrics.enabled -- If true, enable scraping of metrics by Prometheus.
           enabled: true
@@ -103,8 +97,6 @@ parameters:
         storageCapacityTracking:
           # controller.storageCapacityTracking.enabled -- Enable Storage Capacity Tracking for csi-provisoner.
           enabled: true
-        # controller.resources -- Specify resources.
-        resources: ${topolvm:resources:controller}
 
       webhook:
         podMutatingWebhook:
@@ -114,3 +106,15 @@ parameters:
         # podSecurityPolicy.create -- Enable pod security policy.
         # Deprecated in Kubernetes v1.21
         create: false
+
+      # Resources
+      resources:
+        topolvm_node: ${topolvm:resources:node}
+        topolvm_controller: ${topolvm:resources:controller}
+        topolvm_scheduler: ${topolvm:resources:scheduler}
+        lvmd: ${topolvm:resources:lvmd}
+        csi_registrar: {}
+        csi_provisioner: {}
+        csi_resizer: {}
+        csi_snapshotter: {}
+        liveness_probe: {}
