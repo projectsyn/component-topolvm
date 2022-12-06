@@ -28,13 +28,15 @@ spec:
       containers:
         - command:
             - /topolvm-node
-            - --csi-socket=/var/lib/kubelet/plugins/topolvm.io/node/csi-topolvm.sock
+            - --csi-socket=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
             - --lvmd-socket=/run/topolvm/lvmd.sock
           env:
             - name: NODE_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
+            - name: USE_LEGACY
+              value: 'true'
           image: ghcr.io/topolvm/topolvm-with-sidecar:0.16.0
           imagePullPolicy: IfNotPresent
           livenessProbe:
@@ -63,7 +65,7 @@ spec:
           securityContext:
             privileged: true
           volumeMounts:
-            - mountPath: /var/lib/kubelet/plugins/topolvm.io/node/
+            - mountPath: /var/lib/kubelet/plugins/topolvm.cybozu.com/node/
               name: node-plugin-dir
             - mountPath: /run/topolvm
               name: lvmd-socket-dir
@@ -75,8 +77,8 @@ spec:
               name: csi-plugin-dir
         - command:
             - /csi-node-driver-registrar
-            - --csi-address=/var/lib/kubelet/plugins/topolvm.io/node/csi-topolvm.sock
-            - --kubelet-registration-path=/var/lib/kubelet/plugins/topolvm.io/node/csi-topolvm.sock
+            - --csi-address=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
+            - --kubelet-registration-path=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
           image: ghcr.io/topolvm/topolvm-with-sidecar:0.16.0
           imagePullPolicy: IfNotPresent
           lifecycle:
@@ -85,28 +87,28 @@ spec:
                 command:
                   - /bin/sh
                   - -c
-                  - rm -rf /registration/topolvm.io /registration/topolvm.io-reg.sock
+                  - rm -rf /registration/topolvm.cybozu.com /registration/topolvm.cybozu.com-reg.sock
           livenessProbe:
             exec:
               command:
                 - /csi-node-driver-registrar
-                - --kubelet-registration-path=/var/lib/kubelet/plugins/topolvm.io/node/csi-topolvm.sock
+                - --kubelet-registration-path=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
                 - --mode=kubelet-registration-probe
             initialDelaySeconds: 3
           name: csi-registrar
           volumeMounts:
-            - mountPath: /var/lib/kubelet/plugins/topolvm.io/node/
+            - mountPath: /var/lib/kubelet/plugins/topolvm.cybozu.com/node/
               name: node-plugin-dir
             - mountPath: /registration
               name: registration-dir
         - command:
             - /livenessprobe
-            - --csi-address=/var/lib/kubelet/plugins/topolvm.io/node/csi-topolvm.sock
+            - --csi-address=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
           image: ghcr.io/topolvm/topolvm-with-sidecar:0.16.0
           imagePullPolicy: IfNotPresent
           name: liveness-probe
           volumeMounts:
-            - mountPath: /var/lib/kubelet/plugins/topolvm.io/node/
+            - mountPath: /var/lib/kubelet/plugins/topolvm.cybozu.com/node/
               name: node-plugin-dir
       nodeSelector:
         syn.tools/topolvm: ''
@@ -117,7 +119,7 @@ spec:
             type: Directory
           name: registration-dir
         - hostPath:
-            path: /var/lib/kubelet/plugins/topolvm.io/node
+            path: /var/lib/kubelet/plugins/topolvm.cybozu.com/node
             type: DirectoryOrCreate
           name: node-plugin-dir
         - hostPath:

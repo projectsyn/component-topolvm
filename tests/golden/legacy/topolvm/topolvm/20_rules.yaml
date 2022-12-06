@@ -1,0 +1,48 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  annotations: {}
+  labels:
+    name: syn-topolvm-rules
+  name: syn-topolvm-rules
+  namespace: syn-topolvm
+spec:
+  groups:
+    - name: topolvm-alert.rules
+      rules:
+        - alert: SYN_TopoLVMVolumeGroupAlmostFull
+          annotations:
+            description: 'Utilization of volume group {{ $labels.device_class }}
+
+              has crossed 95% on host {{ $labels.node }}.
+
+              '
+            message: LVM volume group is almost full.
+            runbook_url: https://hub.syn.tools/topolvm/runbooks/TopoLVMVolumeGroupAlmostFull.html
+            severity_level: warning
+            storage_type: topolvm
+          expr: (topolvm_volumegroup_available_bytes / topolvm_volumegroup_size_bytes)
+            <= 0.05
+          for: 10m
+          labels:
+            severity: warning
+            syn: 'true'
+            syn_component: topolvm
+        - alert: SYN_TopoLVMVolumeGroupNearFull
+          annotations:
+            description: 'Utilization of volume group {{ $labels.device_class }}
+
+              has crossed 85% on host {{ $labels.node }}.
+
+              '
+            message: LVM volume group is nearing full.
+            runbook_url: https://hub.syn.tools/topolvm/runbooks/TopoLVMVolumeGroupNearFull.html
+            severity_level: warning
+            storage_type: topolvm
+          expr: (topolvm_volumegroup_available_bytes / topolvm_volumegroup_size_bytes)
+            <= 0.15
+          for: 1h
+          labels:
+            severity: warning
+            syn: 'true'
+            syn_component: topolvm

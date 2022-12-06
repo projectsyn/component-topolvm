@@ -41,6 +41,3 @@ parameters:
         - type: jsonnet
           path: topolvm/10_helmchart/topolvm/templates/certificates
           filter: postprocess/patch_certificates.jsonnet
-        - type: jsonnet
-          path: topolvm/10_helmchart/topolvm/crds
-          filter: postprocess/patch_crd.jsonnet

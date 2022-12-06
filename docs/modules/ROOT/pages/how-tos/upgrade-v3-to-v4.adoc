@@ -1,0 +1,16 @@
+= Upgrade from v3 to v4
+
+This release contains a provisioner name change from `topolvm.cybozu.com` to `topolvm.io`.
+
+If you update from v3 you need to enable `useLegacy` parameter.
+
+== Enable `useLegacy` parameter
+
+[source,bash]
+----
+parameters:
+  topolvm:
+    helm_values:
+      useLegacy: true <1>
+----
+<1> Add this line to topolvm configuration.

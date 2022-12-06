@@ -1,0 +1,26 @@
+applications:
+  - openshift4-monitoring
+  - storageclass
+
+parameters:
+  kapitan:
+    dependencies:
+      - type: https
+        source: https://raw.githubusercontent.com/projectsyn/component-storageclass/v1.0.0/lib/storageclass.libsonnet
+        output_path: vendor/lib/storageclass.libsonnet
+
+  facts:
+    distribution: openshift4
+
+  openshift4_monitoring:
+    alerts:
+      ignoreNames: []
+      customAnnotations: {}
+
+  storageclass:
+    defaults: {}
+    defaultClass: ""
+
+  topolvm:
+    helm_values:
+      useLegacy: true

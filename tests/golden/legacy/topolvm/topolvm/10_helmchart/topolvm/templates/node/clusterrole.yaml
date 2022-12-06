@@ -20,7 +20,7 @@ rules:
       - update
       - patch
   - apiGroups:
-      - topolvm.io
+      - topolvm.cybozu.com
     resources:
       - logicalvolumes
       - logicalvolumes/status
