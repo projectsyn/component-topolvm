@@ -8,8 +8,9 @@ local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift
 
 assert
   std.member(inv.applications, 'rancher-monitoring') ||
-  std.member(inv.applications, 'openshift4-monitoring')
-  : 'Neither rancher-monitoring nor openshift4-monitoring is available';
+  std.member(inv.applications, 'openshift4-monitoring') ||
+  std.member(inv.applications, 'prometheus')
+  : 'Neither rancher-monitoring nor openshift4-monitoring nor prometheus is available';
 
 // Function to process an array which supports removing previously added
 // elements by prefixing them with ~
