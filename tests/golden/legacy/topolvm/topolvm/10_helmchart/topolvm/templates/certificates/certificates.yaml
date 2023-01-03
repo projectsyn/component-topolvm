@@ -19,9 +19,9 @@ spec:
     name: topolvm-webhook-selfsign
   secretName: topolvm-webhook-ca
   usages:
-  - digital signature
-  - key encipherment
-  - cert sign
+    - digital signature
+    - key encipherment
+    - cert sign
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -36,9 +36,9 @@ metadata:
   namespace: syn-topolvm
 spec:
   dnsNames:
-  - topolvm-controller
-  - topolvm-controller.syn-topolvm
-  - topolvm-controller.syn-topolvm.svc
+    - topolvm-controller
+    - topolvm-controller.syn-topolvm
+    - topolvm-controller.syn-topolvm.svc
   duration: 8760h0m0s
   issuerRef:
     group: cert-manager.io
@@ -46,7 +46,7 @@ spec:
     name: topolvm-webhook-ca
   secretName: topolvm-mutatingwebhook
   usages:
-  - digital signature
-  - key encipherment
-  - server auth
-  - client auth
+    - digital signature
+    - key encipherment
+    - server auth
+    - client auth

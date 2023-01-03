@@ -2,7 +2,7 @@
 
 This release contains a provisioner name change from `topolvm.cybozu.com` to `topolvm.io`.
 
-If you update from v3 you need to enable `useLegacy` parameter.
+If you update from v3, you need to enable `useLegacy` parameter.
 
 == Enable `useLegacy` parameter
 
