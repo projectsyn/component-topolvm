@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.15.2
-    helm.sh/chart: topolvm-9.1.0
+    app.kubernetes.io/version: 0.15.3
+    helm.sh/chart: topolvm-10.0.0
   name: leader-election
   namespace: syn-topolvm
 rules:
@@ -39,8 +39,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.15.2
-    helm.sh/chart: topolvm-9.1.0
+    app.kubernetes.io/version: 0.15.3
+    helm.sh/chart: topolvm-10.0.0
   name: external-provisioner-cfg
   namespace: syn-topolvm
 rules:
@@ -87,8 +87,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.15.2
-    helm.sh/chart: topolvm-9.1.0
+    app.kubernetes.io/version: 0.15.3
+    helm.sh/chart: topolvm-10.0.0
   name: external-resizer-cfg
   namespace: syn-topolvm
 rules:
@@ -111,8 +111,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.15.2
-    helm.sh/chart: topolvm-9.1.0
+    app.kubernetes.io/version: 0.15.3
+    helm.sh/chart: topolvm-10.0.0
   name: external-snapshotter-leaderelection
   namespace: syn-topolvm
 rules:

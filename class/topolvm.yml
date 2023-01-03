@@ -5,29 +5,29 @@ parameters:
         source: ${topolvm:charts:topolvm:source}
         chart_name: topolvm
         version: ${topolvm:charts:topolvm:version}
-        output_path: dependencies/topolvm/helmcharts/topolvm/${topolvm:charts:topolvm:version}/
+        output_path: ${_base_directory}/helmcharts/topolvm/${topolvm:charts:topolvm:version}/
     compile:
       # ArgoCD App
       - input_paths:
-          - topolvm/component/app.jsonnet
+          - ${_base_directory}/component/app.jsonnet
         input_type: jsonnet
         output_path: apps/
       # Custom Manifests
       - input_paths:
-          - topolvm/component/main.jsonnet
+          - ${_base_directory}/component/main.jsonnet
         input_type: jsonnet
         output_path: topolvm/
       - input_paths:
-          - topolvm/component/ocpscc.jsonnet
+          - ${_base_directory}/component/ocpscc.jsonnet
         input_type: jsonnet
         output_path: topolvm/
       - input_paths:
-          - topolvm/component/alertrules.jsonnet
+          - ${_base_directory}/component/alertrules.jsonnet
         input_type: jsonnet
         output_path: topolvm/
       # Helmchart
       - input_paths:
-          - topolvm/helmcharts/topolvm/${topolvm:charts:topolvm:version}
+          - ${_base_directory}/helmcharts/topolvm/${topolvm:charts:topolvm:version}
         input_type: helm
         output_path: topolvm/10_helmchart
         helm_values: ${topolvm:helm_values}
