@@ -5,9 +5,9 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.15.3
-    helm.sh/chart: topolvm-10.0.0
-  name: topolvm.cybozu.com
+    app.kubernetes.io/version: 0.16.0
+    helm.sh/chart: topolvm-11.0.0
+  name: topolvm.io
 spec:
   attachRequired: false
   podInfoOnMount: true

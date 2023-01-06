@@ -8,7 +8,7 @@ parameters:
     charts:
       topolvm:
         source: https://topolvm.github.io/topolvm
-        version: 10.0.0
+        version: 11.0.0
 
     deviceclasses: []
 
@@ -46,6 +46,9 @@ parameters:
           cpu: 200m
 
     helm_values:
+      # useLegacy -- If true, the legacy plugin name and legacy custom resource group is used(topolvm.cybozu.com).
+      useLegacy: false
+
       image:
         # image.pullPolicy -- TopoLVM image pullPolicy.
         pullPolicy: IfNotPresent

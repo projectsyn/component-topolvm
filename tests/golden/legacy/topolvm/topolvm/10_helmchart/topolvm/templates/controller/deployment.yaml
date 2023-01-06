@@ -41,6 +41,9 @@ spec:
         - command:
             - /topolvm-controller
             - --cert-dir=/certs
+          env:
+            - name: USE_LEGACY
+              value: 'true'
           image: ghcr.io/topolvm/topolvm-with-sidecar:0.16.0
           imagePullPolicy: IfNotPresent
           livenessProbe:
