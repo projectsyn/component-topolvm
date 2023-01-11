@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.16.0
-    helm.sh/chart: topolvm-11.0.0
+    app.kubernetes.io/version: 0.17.0
+    helm.sh/chart: topolvm-11.0.1
   name: topolvm-node
   namespace: syn-topolvm
 spec:
@@ -35,7 +35,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.16.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.17.0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
@@ -77,7 +77,8 @@ spec:
             - /csi-node-driver-registrar
             - --csi-address=/var/lib/kubelet/plugins/topolvm.io/node/csi-topolvm.sock
             - --kubelet-registration-path=/var/lib/kubelet/plugins/topolvm.io/node/csi-topolvm.sock
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.16.0
+            - --http-endpoint=:9809
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.17.0
           imagePullPolicy: IfNotPresent
           lifecycle:
             preStop:
@@ -87,13 +88,16 @@ spec:
                   - -c
                   - rm -rf /registration/topolvm.io /registration/topolvm.io-reg.sock
           livenessProbe:
-            exec:
-              command:
-                - /csi-node-driver-registrar
-                - --kubelet-registration-path=/var/lib/kubelet/plugins/topolvm.io/node/csi-topolvm.sock
-                - --mode=kubelet-registration-probe
-            initialDelaySeconds: 3
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: healthz
+            initialDelaySeconds: 10
+            timeoutSeconds: 3
           name: csi-registrar
+          ports:
+            - containerPort: 9809
+              name: healthz
           volumeMounts:
             - mountPath: /var/lib/kubelet/plugins/topolvm.io/node/
               name: node-plugin-dir
@@ -102,7 +106,7 @@ spec:
         - command:
             - /livenessprobe
             - --csi-address=/var/lib/kubelet/plugins/topolvm.io/node/csi-topolvm.sock
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.16.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.17.0
           imagePullPolicy: IfNotPresent
           name: liveness-probe
           volumeMounts:
