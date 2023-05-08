@@ -105,6 +105,9 @@ parameters:
         podMutatingWebhook:
           # webhook.podMutatingWebhook.enabled -- Enable Pod MutatingWebhook.
           enabled: false
+        pvcMutatingWebhook:
+          # webhook.pvcMutatingWebhook.enabled -- Enable PVC MutatingWebhook.
+          enabled: false
       podSecurityPolicy:
         # podSecurityPolicy.create -- Enable pod security policy.
         # Deprecated in Kubernetes v1.21
