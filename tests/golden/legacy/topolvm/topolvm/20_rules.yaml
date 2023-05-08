@@ -12,11 +12,9 @@ spec:
       rules:
         - alert: SYN_TopoLVMVolumeGroupAlmostFull
           annotations:
-            description: 'Utilization of volume group {{ $labels.device_class }}
-
+            description: |
+              Utilization of volume group {{ $labels.device_class }}
               has crossed 95% on host {{ $labels.node }}.
-
-              '
             message: LVM volume group is almost full.
             runbook_url: https://hub.syn.tools/topolvm/runbooks/TopoLVMVolumeGroupAlmostFull.html
             severity_level: warning
@@ -30,11 +28,9 @@ spec:
             syn_component: topolvm
         - alert: SYN_TopoLVMVolumeGroupNearFull
           annotations:
-            description: 'Utilization of volume group {{ $labels.device_class }}
-
+            description: |
+              Utilization of volume group {{ $labels.device_class }}
               has crossed 85% on host {{ $labels.node }}.
-
-              '
             message: LVM volume group is nearing full.
             runbook_url: https://hub.syn.tools/topolvm/runbooks/TopoLVMVolumeGroupNearFull.html
             severity_level: warning

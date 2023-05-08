@@ -1,3 +1,4 @@
+local alertpatching = import 'lib/alert-patching.libsonnet';
 local com = import 'lib/commodore.libjsonnet';
 local kap = import 'lib/kapitan.libjsonnet';
 local kube = import 'lib/kube.libjsonnet';
@@ -7,68 +8,15 @@ local params = inv.parameters.topolvm;
 local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
 
 assert
-  std.member(inv.applications, 'rancher-monitoring') ||
   std.member(inv.applications, 'openshift4-monitoring') ||
-  std.member(inv.applications, 'prometheus')
-  : 'Neither rancher-monitoring nor openshift4-monitoring nor prometheus is available';
-
-// Function to process an array which supports removing previously added
-// elements by prefixing them with ~
-local render_array(arr) =
-  // extract real value of array entry
-  local realval(v) = std.lstripChars(v, '~');
-  // Compute whether each element should be included by keeping track of
-  // whether its last occurrence in the input array was prefixed with ~ or
-  // not.
-  local val_state = std.foldl(
-    function(a, it) a + it,
-    [
-      { [realval(v)]: !std.startsWith(v, '~') }
-      for v in arr
-    ],
-    {}
-  );
-  // Return filtered array containing only elements whose last occurrence
-  // wasn't prefixed by ~.
-  std.filter(
-    function(val) val_state[val],
-    std.objectFields(val_state)
-  );
+  isOpenshift != true
+  : 'Component openshift4-monitoring is not available';
 
 // Upstream alerts to ignore
 local ignore_alerts = std.set(
   // Add set of alerts that should be ignored from `params.ignore_alerts`
-  render_array(params.ignore_alerts)
+  com.renderArray(params.ignore_alerts)
 );
-
-/* FROM HERE: should be provided as library function by
- * rancher-/openshift4-monitoring */
-// We shouldn't be expected to care how rancher-/openshift4-monitoring
-// implement alert managmement and patching, instead we should be able to
-// reuse their functionality as a black box to make sure our alerts work
-// correctly in the environment into which we're deploying.
-
-local global_alert_params =
-  if isOpenshift then
-    inv.parameters.openshift4_monitoring.alerts
-  else
-    inv.parameters.rancher_monitoring.alerts;
-
-local filter_patch_rules(g) =
-  // combine our set of alerts to ignore with the monitoring component's
-  // set of ignoreNames.
-  local ignore_set = std.set(global_alert_params.ignoreNames + ignore_alerts);
-  g {
-    rules: std.filter(
-      // Filter out unwanted rules
-      function(rule)
-        // Drop rules which are in the ignore_set
-        !std.member(ignore_set, rule.alert),
-      super.rules
-    ),
-  };
-
-/* TO HERE */
 
 local alertrules = {
   groups: [
@@ -120,20 +68,27 @@ local alertrules = {
   ],
 };
 
-{
-  '20_rules': kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'syn-topolvm-rules') {
-    metadata+: {
-      namespace: params.namespace,
+// Define outputs below
+if isOpenshift then
+  {
+    '20_rules': kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'syn-topolvm-rules') {
+      metadata+: {
+        namespace: params.namespace,
+      },
+      spec: {
+        groups: std.filter(
+          function(it) it != null,
+          [
+            local r = alertpatching.filterPatchRules(g, ignore_alerts);
+            if std.length(r.rules) > 0 then r
+            for g in alertrules.groups
+          ]
+        ),
+      },
     },
-    spec: {
-      groups: std.filter(
-        function(it) it != null,
-        [
-          local r = filter_patch_rules(g);
-          if std.length(r.rules) > 0 then r
-          for g in alertrules.groups
-        ]
-      ),
-    },
-  },
-}
+  }
+else
+  std.trace(
+    'Alert handling library not available, not deploying alertrules',
+    {}
+  )

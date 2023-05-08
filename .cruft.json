@@ -1,13 +1,13 @@
 {
   "template": "https://github.com/projectsyn/commodore-component-template.git",
-  "commit": "ef92fecb9af78303d98ba569b7a06a72d4dea8f0",
+  "commit": "cfd150bd41deaa0ad10d522ec5fd0abafed65800",
   "checkout": "main",
   "context": {
     "cookiecutter": {
       "name": "TopoLVM",
       "slug": "topolvm",
       "parameter_key": "topolvm",
-      "test_cases": "defaults legacy",
+      "test_cases": "defaults legacy noalertrules",
       "add_lib": "n",
       "add_pp": "n",
       "add_golden": "y",

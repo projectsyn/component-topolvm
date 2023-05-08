@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app.kubernetes.io/instance: topolvm
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: topolvm
+    app.kubernetes.io/version: 0.17.0
+    helm.sh/chart: topolvm-11.0.1
+    idx: '0'
+  name: topolvm-lvmd-0
+  namespace: syn-topolvm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: lvmd
+      app.kubernetes.io/instance: topolvm
+      app.kubernetes.io/name: topolvm
+      idx: '0'
+  template:
+    metadata:
+      annotations:
+        checksum/config: 4660b703b09e0a5f76dfd6352e63bd16d229f39aeb7b5042ecb261ad17c236ce
+        prometheus.io/port: metrics
+        prometheus.io/scrape: 'true'
+      labels:
+        app.kubernetes.io/component: lvmd
+        app.kubernetes.io/instance: topolvm
+        app.kubernetes.io/name: topolvm
+        idx: '0'
+    spec:
+      containers:
+        - command:
+            - /lvmd
+            - --container
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.17.0
+          livenessProbe:
+            exec:
+              command:
+                - /lvmd
+                - health
+            initialDelaySeconds: 10
+            timeoutSeconds: 3
+          name: lvmd
+          resources:
+            limits:
+              cpu: 500m
+              memory: 500Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /etc/topolvm
+              name: config
+            - mountPath: /run/topolvm
+              name: lvmd-socket-dir
+      hostPID: true
+      nodeSelector:
+        syn.tools/topolvm: ''
+      serviceAccountName: topolvm-lvmd
+      volumes:
+        - configMap:
+            name: topolvm-lvmd-0
+          name: config
+        - hostPath:
+            path: /run/topolvm
+            type: DirectoryOrCreate
+          name: lvmd-socket-dir

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: topolvm
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: topolvm
+    app.kubernetes.io/version: 0.17.0
+    helm.sh/chart: topolvm-11.0.1
+  name: topolvm-controller
+  namespace: syn-topolvm
+spec:
+  ports:
+    - name: webhook
+      port: 443
+      protocol: TCP
+      targetPort: webhook
+  selector:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: topolvm
+    app.kubernetes.io/name: topolvm

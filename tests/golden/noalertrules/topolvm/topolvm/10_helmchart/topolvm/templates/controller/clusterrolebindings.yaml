@@ -1,0 +1,75 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/instance: topolvm
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: topolvm
+    app.kubernetes.io/version: 0.17.0
+    helm.sh/chart: topolvm-11.0.1
+  name: syn-topolvm:controller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: syn-topolvm:controller
+subjects:
+  - kind: ServiceAccount
+    name: topolvm-controller
+    namespace: syn-topolvm
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/instance: topolvm
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: topolvm
+    app.kubernetes.io/version: 0.17.0
+    helm.sh/chart: topolvm-11.0.1
+  name: syn-topolvm-csi-provisioner-role
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: syn-topolvm-external-provisioner-runner
+subjects:
+  - kind: ServiceAccount
+    name: topolvm-controller
+    namespace: syn-topolvm
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/instance: topolvm
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: topolvm
+    app.kubernetes.io/version: 0.17.0
+    helm.sh/chart: topolvm-11.0.1
+  name: syn-topolvm-csi-resizer-role
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: syn-topolvm-external-resizer-runner
+subjects:
+  - kind: ServiceAccount
+    name: topolvm-controller
+    namespace: syn-topolvm
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/instance: topolvm
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: topolvm
+    app.kubernetes.io/version: 0.17.0
+    helm.sh/chart: topolvm-11.0.1
+  name: syn-topolvm-csi-snapshotter-role
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: syn-topolvm-external-snapshotter-runner
+subjects:
+  - kind: ServiceAccount
+    name: topolvm-controller
+    namespace: syn-topolvm
