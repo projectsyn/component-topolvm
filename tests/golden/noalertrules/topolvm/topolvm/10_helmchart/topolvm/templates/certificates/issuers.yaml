@@ -1,0 +1,28 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  labels:
+    app.kubernetes.io/instance: topolvm
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: topolvm
+    app.kubernetes.io/version: 0.17.0
+    helm.sh/chart: topolvm-11.0.1
+  name: topolvm-webhook-selfsign
+  namespace: syn-topolvm
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  labels:
+    app.kubernetes.io/instance: topolvm
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: topolvm
+    app.kubernetes.io/version: 0.17.0
+    helm.sh/chart: topolvm-11.0.1
+  name: topolvm-webhook-ca
+  namespace: syn-topolvm
+spec:
+  ca:
+    secretName: topolvm-webhook-ca

@@ -7,7 +7,7 @@
       "name": "TopoLVM",
       "slug": "topolvm",
       "parameter_key": "topolvm",
-      "test_cases": "defaults legacy",
+      "test_cases": "defaults legacy noalertrules",
       "add_lib": "n",
       "add_pp": "n",
       "add_golden": "y",
