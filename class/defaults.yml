@@ -8,7 +8,7 @@ parameters:
     charts:
       topolvm:
         source: https://topolvm.github.io/topolvm
-        version: 11.0.1
+        version: 11.2.0
 
     deviceclasses: []
 
@@ -104,6 +104,9 @@ parameters:
       webhook:
         podMutatingWebhook:
           # webhook.podMutatingWebhook.enabled -- Enable Pod MutatingWebhook.
+          enabled: false
+        pvcMutatingWebhook:
+          # webhook.pvcMutatingWebhook.enabled -- Enable PVC MutatingWebhook.
           enabled: false
       podSecurityPolicy:
         # podSecurityPolicy.create -- Enable pod security policy.
