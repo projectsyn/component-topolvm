@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.18.2
-    helm.sh/chart: topolvm-11.2.0
+    app.kubernetes.io/version: 0.19.0
+    helm.sh/chart: topolvm-11.2.1
   name: topolvm-webhook-selfsign
   namespace: syn-topolvm
 spec:
@@ -19,8 +19,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.18.2
-    helm.sh/chart: topolvm-11.2.0
+    app.kubernetes.io/version: 0.19.0
+    helm.sh/chart: topolvm-11.2.1
   name: topolvm-webhook-ca
   namespace: syn-topolvm
 spec:

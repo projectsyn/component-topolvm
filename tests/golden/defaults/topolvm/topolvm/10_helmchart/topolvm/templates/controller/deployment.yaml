@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.18.2
-    helm.sh/chart: topolvm-11.2.0
+    app.kubernetes.io/version: 0.19.0
+    helm.sh/chart: topolvm-11.2.1
   name: topolvm-controller
   namespace: syn-topolvm
 spec:
@@ -41,7 +41,7 @@ spec:
         - command:
             - /topolvm-controller
             - --cert-dir=/certs
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.18.2
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.19.0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
@@ -100,7 +100,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.18.2
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.19.0
           imagePullPolicy: IfNotPresent
           name: csi-provisioner
           ports:
@@ -115,7 +115,7 @@ spec:
             - --leader-election
             - --leader-election-namespace=syn-topolvm
             - --http-endpoint=:9810
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.18.2
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.19.0
           imagePullPolicy: IfNotPresent
           name: csi-resizer
           ports:
@@ -130,7 +130,7 @@ spec:
             - --leader-election
             - --leader-election-namespace=syn-topolvm
             - --http-endpoint=:9811
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.18.2
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.19.0
           imagePullPolicy: IfNotPresent
           name: csi-snapshotter
           ports:
@@ -143,7 +143,7 @@ spec:
             - /livenessprobe
             - --csi-address=/run/topolvm/csi-topolvm.sock
             - --http-endpoint=:9808
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.18.2
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.19.0
           imagePullPolicy: IfNotPresent
           name: liveness-probe
           ports:
