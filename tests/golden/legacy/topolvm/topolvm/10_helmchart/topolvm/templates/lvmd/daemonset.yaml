@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.19.0
-    helm.sh/chart: topolvm-11.2.1
+    app.kubernetes.io/version: 0.19.1
+    helm.sh/chart: topolvm-11.3.0
     idx: '0'
   name: topolvm-lvmd-0
   namespace: syn-topolvm
@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: c7264126f1ab4e88eded8980169cd29073c41777efa17b37544c84dd80674d54
+        checksum/config: 9fd17cf1933ec71ec53f8e62217c13b82edafd9aee9db6429e4474b1a6fdbcd2
       labels:
         app.kubernetes.io/component: lvmd
         app.kubernetes.io/instance: topolvm
@@ -31,7 +31,7 @@ spec:
         - command:
             - /lvmd
             - --container
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.19.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.19.1
           imagePullPolicy: IfNotPresent
           livenessProbe:
             exec:
@@ -39,6 +39,7 @@ spec:
                 - /lvmd
                 - health
             initialDelaySeconds: 10
+            periodSeconds: 60
             timeoutSeconds: 3
           name: lvmd
           resources:

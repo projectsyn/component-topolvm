@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.19.0
-    helm.sh/chart: topolvm-11.2.1
+    app.kubernetes.io/version: 0.19.1
+    helm.sh/chart: topolvm-11.3.0
   name: topolvm-node
   namespace: syn-topolvm
 spec:
@@ -35,10 +35,9 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.19.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.19.1
           imagePullPolicy: IfNotPresent
           livenessProbe:
-            failureThreshold: 3
             httpGet:
               path: /healthz
               port: healthz
@@ -78,7 +77,7 @@ spec:
             - --csi-address=/var/lib/kubelet/plugins/topolvm.io/node/csi-topolvm.sock
             - --kubelet-registration-path=/var/lib/kubelet/plugins/topolvm.io/node/csi-topolvm.sock
             - --http-endpoint=:9809
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.19.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.19.1
           imagePullPolicy: IfNotPresent
           lifecycle:
             preStop:
@@ -88,11 +87,11 @@ spec:
                   - -c
                   - rm -rf /registration/topolvm.io /registration/topolvm.io-reg.sock
           livenessProbe:
-            failureThreshold: 3
             httpGet:
               path: /healthz
               port: healthz
             initialDelaySeconds: 10
+            periodSeconds: 60
             timeoutSeconds: 3
           name: csi-registrar
           ports:
@@ -107,7 +106,7 @@ spec:
             - /livenessprobe
             - --csi-address=/var/lib/kubelet/plugins/topolvm.io/node/csi-topolvm.sock
             - --http-endpoint=:9808
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.19.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.19.1
           imagePullPolicy: IfNotPresent
           name: liveness-probe
           ports:
