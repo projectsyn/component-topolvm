@@ -31,9 +31,9 @@ local StorageClass(name='ssd-local') = sc.storageClass(name) {
   allowVolumeExpansion: params.storageclasses[name].volumeexpansion,
   parameters: {
     'csi.storage.k8s.io/fstype': params.storageclasses[name].fstype,
-    'topolvm.cybozu.com/device-class': params.storageclasses[name].class,
+    [if params.helm_values.useLegacy then 'topolvm.cybozu.com/device-class' else 'topolvm.io/device-class']: params.storageclasses[name].class,
   },
-  provisioner: 'topolvm.cybozu.com',
+  provisioner: if params.helm_values.useLegacy then 'topolvm.cybozu.com' else 'topolvm.io',
   volumeBindingMode: 'WaitForFirstConsumer',
   [if std.objectHas(params.storageclasses[name], 'retainpolicy') then 'reclaimPolicy']: params.storageclasses[name].retainpolicy,
 };

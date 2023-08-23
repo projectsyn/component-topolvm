@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 9fd17cf1933ec71ec53f8e62217c13b82edafd9aee9db6429e4474b1a6fdbcd2
+        checksum/config: cacee65c76d69cc449b54f11a887ae2fbb9f6c2427e87dc2a337bc3df30ee883
       labels:
         app.kubernetes.io/component: lvmd
         app.kubernetes.io/instance: topolvm

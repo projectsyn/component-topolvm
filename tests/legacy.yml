@@ -27,3 +27,14 @@ parameters:
   topolvm:
     helm_values:
       useLegacy: true
+    deviceclasses:
+      - name: ssd
+        volume-group: vg-topolvm
+        default: true
+        spare-gb: 10
+    storageclasses:
+      ssd-local:
+        class: ssd
+        fstype: ext4
+        volumeexpansion: true
+        retainpolicy: Delete
