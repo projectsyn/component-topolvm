@@ -8,7 +8,7 @@ parameters:
     charts:
       topolvm:
         source: https://topolvm.github.io/topolvm
-        version: 11.5.0
+        version: 12.0.0
 
     deviceclasses: []
 
@@ -108,10 +108,6 @@ parameters:
         pvcMutatingWebhook:
           # webhook.pvcMutatingWebhook.enabled -- Enable PVC MutatingWebhook.
           enabled: false
-      podSecurityPolicy:
-        # podSecurityPolicy.create -- Enable pod security policy.
-        # Deprecated in Kubernetes v1.21
-        create: false
 
       # Resources
       resources:
