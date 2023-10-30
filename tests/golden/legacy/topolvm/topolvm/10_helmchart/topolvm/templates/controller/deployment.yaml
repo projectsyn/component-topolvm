@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.21.0
-    helm.sh/chart: topolvm-11.5.0
+    app.kubernetes.io/version: 0.22.0
+    helm.sh/chart: topolvm-12.0.0
   name: topolvm-controller
   namespace: syn-topolvm
 spec:
@@ -41,11 +41,11 @@ spec:
         - command:
             - /topolvm-controller
             - --leader-election-namespace=syn-topolvm
-            - --cert-dir=/certs
+            - --enable-webhooks=false
           env:
             - name: USE_LEGACY
               value: 'true'
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.21.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.22.0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
@@ -83,8 +83,6 @@ spec:
           volumeMounts:
             - mountPath: /run/topolvm
               name: socket-dir
-            - mountPath: /certs
-              name: certs
         - command:
             - /csi-provisioner
             - --csi-address=/run/topolvm/csi-topolvm.sock
@@ -103,7 +101,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.21.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.22.0
           imagePullPolicy: IfNotPresent
           name: csi-provisioner
           ports:
@@ -118,7 +116,7 @@ spec:
             - --leader-election
             - --leader-election-namespace=syn-topolvm
             - --http-endpoint=:9810
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.21.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.22.0
           imagePullPolicy: IfNotPresent
           name: csi-resizer
           ports:
@@ -133,7 +131,7 @@ spec:
             - --leader-election
             - --leader-election-namespace=syn-topolvm
             - --http-endpoint=:9811
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.21.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.22.0
           imagePullPolicy: IfNotPresent
           name: csi-snapshotter
           ports:
@@ -146,7 +144,7 @@ spec:
             - /livenessprobe
             - --csi-address=/run/topolvm/csi-topolvm.sock
             - --http-endpoint=:9808
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.21.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.22.0
           imagePullPolicy: IfNotPresent
           name: liveness-probe
           ports:
@@ -160,8 +158,5 @@ spec:
         runAsUser: 10000
       serviceAccountName: topolvm-controller
       volumes:
-        - name: certs
-          secret:
-            secretName: topolvm-mutatingwebhook
         - emptyDir: {}
           name: socket-dir
