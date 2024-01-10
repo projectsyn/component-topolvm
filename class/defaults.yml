@@ -8,7 +8,7 @@ parameters:
     charts:
       topolvm:
         source: https://topolvm.github.io/topolvm
-        version: 13.0.0
+        version: 13.0.1
 
     deviceclasses: []
 
