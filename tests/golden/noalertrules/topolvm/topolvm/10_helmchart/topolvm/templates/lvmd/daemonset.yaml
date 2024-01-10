@@ -1,12 +1,14 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: '2'
   labels:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.24.0
-    helm.sh/chart: topolvm-13.0.0
+    app.kubernetes.io/version: 0.25.0
+    helm.sh/chart: topolvm-13.0.1
     idx: '0'
   name: topolvm-lvmd-0
   namespace: syn-topolvm
@@ -20,7 +22,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: b8f4b516621e806daaf430aac2c7fe44de8194c496407f97dfb01e6f0838d5d5
+        checksum/config: 66c71a03817a9303d8eff5627e4de4e9a2240aca4503d06f8b15bdefdbe12e77
       labels:
         app.kubernetes.io/component: lvmd
         app.kubernetes.io/instance: topolvm
@@ -31,7 +33,7 @@ spec:
         - command:
             - /lvmd
             - --container
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.24.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.25.0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             exec:
