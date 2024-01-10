@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   annotations:
-    argocd.argoproj.io/sync-wave: '2'
+    argocd.argoproj.io/sync-wave: '1'
   labels:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
