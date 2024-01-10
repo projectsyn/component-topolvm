@@ -7,14 +7,14 @@ local topo_lvmd = com.yaml_load_all(std.extVar('output_path') + '/lvmd/daemonset
   'node/daemonset': topo_nodes {
     metadata+: {
       annotations+: {
-        'argocd.argoproj.io/sync-wave': '1',
+        'argocd.argoproj.io/sync-wave': '2',
       },
     },
   },
   'lvmd/daemonset': topo_lvmd {
     metadata+: {
       annotations+: {
-        'argocd.argoproj.io/sync-wave': '2',
+        'argocd.argoproj.io/sync-wave': '1',
       },
     },
   },
