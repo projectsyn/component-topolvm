@@ -31,7 +31,7 @@ spec:
         - command:
             - /topolvm-node
             - --csi-socket=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
-            - --lvmd-socket=/run/topolvm/lvmd.sock
+            - --embed-lvmd
           env:
             - name: NODE_NAME
               valueFrom:
@@ -68,8 +68,8 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/kubelet/plugins/topolvm.cybozu.com/node/
               name: node-plugin-dir
-            - mountPath: /run/topolvm
-              name: lvmd-socket-dir
+            - mountPath: /etc/topolvm
+              name: config
             - mountPath: /var/lib/kubelet/pods
               mountPropagation: Bidirectional
               name: pod-volumes-dir
@@ -116,6 +116,7 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/kubelet/plugins/topolvm.cybozu.com/node/
               name: node-plugin-dir
+      hostPID: true
       nodeSelector:
         syn.tools/topolvm: ''
       serviceAccountName: topolvm-node
@@ -136,7 +137,6 @@ spec:
             path: /var/lib/kubelet/pods/
             type: DirectoryOrCreate
           name: pod-volumes-dir
-        - hostPath:
-            path: /run/topolvm
-            type: Directory
-          name: lvmd-socket-dir
+        - configMap:
+            name: topolvm-lvmd-0
+          name: config
