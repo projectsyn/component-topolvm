@@ -72,6 +72,8 @@ parameters:
         # lvmd.nodeSelector -- Specify nodeSelector.
         nodeSelector:
           syn.tools/topolvm: ""
+        # node.priorityClassName -- Specify priorityClassName.
+        priorityClassName: system-node-critical
 
       # storageClasses -- Whether to create storageclass(s)
       storageClasses: []
@@ -97,12 +99,15 @@ parameters:
             enabled: true
             # node.prometheus.podMonitor.namespace -- Optional namespace in which to create PodMonitor.
             namespace: syn-topolvm
-
+        # node.priorityClassName -- Specify priorityClassName.
+        priorityClassName: system-node-critical
       # CSI controller service
       controller:
         storageCapacityTracking:
           # controller.storageCapacityTracking.enabled -- Enable Storage Capacity Tracking for csi-provisoner.
           enabled: true
+        # node.priorityClassName -- Specify priorityClassName.
+        priorityClassName: system-cluster-critical
 
       webhook:
         podMutatingWebhook:

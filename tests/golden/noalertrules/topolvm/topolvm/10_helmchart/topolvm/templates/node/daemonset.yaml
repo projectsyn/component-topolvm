@@ -117,6 +117,7 @@ spec:
       hostPID: true
       nodeSelector:
         syn.tools/topolvm: ''
+      priorityClassName: system-node-critical
       serviceAccountName: topolvm-node
       volumes:
         - hostPath:
