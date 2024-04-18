@@ -147,6 +147,7 @@ spec:
           volumeMounts:
             - mountPath: /run/topolvm
               name: socket-dir
+      priorityClassName: system-cluster-critical
       securityContext:
         runAsGroup: 10000
         runAsUser: 10000
