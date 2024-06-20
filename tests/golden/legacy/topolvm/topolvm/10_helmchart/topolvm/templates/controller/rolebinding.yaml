@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.26.0
-    helm.sh/chart: topolvm-14.0.0
+    app.kubernetes.io/version: 0.29.0
+    helm.sh/chart: topolvm-14.1.2
   name: leader-election
   namespace: syn-topolvm
 roleRef:
@@ -25,8 +25,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.26.0
-    helm.sh/chart: topolvm-14.0.0
+    app.kubernetes.io/version: 0.29.0
+    helm.sh/chart: topolvm-14.1.2
   name: csi-provisioner-role-cfg
   namespace: syn-topolvm
 roleRef:
@@ -45,8 +45,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.26.0
-    helm.sh/chart: topolvm-14.0.0
+    app.kubernetes.io/version: 0.29.0
+    helm.sh/chart: topolvm-14.1.2
   name: csi-resizer-role-cfg
   namespace: syn-topolvm
 roleRef:
@@ -65,8 +65,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.26.0
-    helm.sh/chart: topolvm-14.0.0
+    app.kubernetes.io/version: 0.29.0
+    helm.sh/chart: topolvm-14.1.2
   name: external-snapshotter-leaderelection
   namespace: syn-topolvm
 roleRef:
