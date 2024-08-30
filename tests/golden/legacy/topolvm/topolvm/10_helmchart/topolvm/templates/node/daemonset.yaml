@@ -7,8 +7,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.29.0
-    helm.sh/chart: topolvm-14.1.2
+    app.kubernetes.io/version: 0.33.0
+    helm.sh/chart: topolvm-15.2.0
   name: topolvm-node
   namespace: syn-topolvm
 spec:
@@ -39,7 +39,7 @@ spec:
                   fieldPath: spec.nodeName
             - name: USE_LEGACY
               value: 'true'
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.29.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.33.0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
@@ -76,12 +76,14 @@ spec:
             - mountPath: /var/lib/kubelet/plugins/kubernetes.io/csi
               mountPropagation: Bidirectional
               name: csi-plugin-dir
+            - mountPath: /dev
+              name: devices-dir
         - command:
             - /csi-node-driver-registrar
             - --csi-address=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
             - --kubelet-registration-path=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
             - --http-endpoint=:9809
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.29.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.33.0
           imagePullPolicy: IfNotPresent
           lifecycle:
             preStop:
@@ -110,7 +112,7 @@ spec:
             - /livenessprobe
             - --csi-address=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
             - --http-endpoint=:9808
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.29.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.33.0
           imagePullPolicy: IfNotPresent
           name: liveness-probe
           volumeMounts:
@@ -122,6 +124,10 @@ spec:
       priorityClassName: system-node-critical
       serviceAccountName: topolvm-node
       volumes:
+        - hostPath:
+            path: /dev
+            type: Directory
+          name: devices-dir
         - hostPath:
             path: /var/lib/kubelet/plugins_registry/
             type: Directory

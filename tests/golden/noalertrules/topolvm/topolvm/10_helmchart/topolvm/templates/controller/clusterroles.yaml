@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.29.0
-    helm.sh/chart: topolvm-14.1.2
+    app.kubernetes.io/version: 0.33.0
+    helm.sh/chart: topolvm-15.2.0
   name: syn-topolvm:controller
 rules:
   - apiGroups:
@@ -68,8 +68,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.29.0
-    helm.sh/chart: topolvm-14.1.2
+    app.kubernetes.io/version: 0.33.0
+    helm.sh/chart: topolvm-15.2.0
   name: syn-topolvm-external-provisioner-runner
 rules:
   - apiGroups:
@@ -81,6 +81,7 @@ rules:
       - list
       - watch
       - create
+      - patch
       - delete
   - apiGroups:
       - ''
@@ -155,8 +156,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.29.0
-    helm.sh/chart: topolvm-14.1.2
+    app.kubernetes.io/version: 0.33.0
+    helm.sh/chart: topolvm-15.2.0
   name: syn-topolvm-external-resizer-runner
 rules:
   - apiGroups:
@@ -200,6 +201,14 @@ rules:
       - create
       - update
       - patch
+  - apiGroups:
+      - storage.k8s.io
+    resources:
+      - volumeattributesclasses
+    verbs:
+      - get
+      - list
+      - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -208,8 +217,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.29.0
-    helm.sh/chart: topolvm-14.1.2
+    app.kubernetes.io/version: 0.33.0
+    helm.sh/chart: topolvm-15.2.0
   name: syn-topolvm-external-snapshotter-runner
 rules:
   - apiGroups:
@@ -233,6 +242,17 @@ rules:
   - apiGroups:
       - snapshot.storage.k8s.io
     resources:
+      - volumesnapshots
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch
+      - create
+  - apiGroups:
+      - snapshot.storage.k8s.io
+    resources:
       - volumesnapshotcontents
     verbs:
       - get
@@ -240,10 +260,36 @@ rules:
       - watch
       - update
       - patch
+      - create
   - apiGroups:
       - snapshot.storage.k8s.io
     resources:
       - volumesnapshotcontents/status
+    verbs:
+      - update
+      - patch
+  - apiGroups:
+      - groupsnapshot.storage.k8s.io
+    resources:
+      - volumegroupsnapshotclasses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - groupsnapshot.storage.k8s.io
+    resources:
+      - volumegroupsnapshotcontents
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch
+  - apiGroups:
+      - groupsnapshot.storage.k8s.io
+    resources:
+      - volumegroupsnapshotcontents/status
     verbs:
       - update
       - patch
