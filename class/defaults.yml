@@ -1,6 +1,7 @@
 parameters:
   topolvm:
-    =_metadata: {}
+    =_metadata:
+      multi_tenant: true
     namespace: syn-topolvm
 
     ignore_alerts: []

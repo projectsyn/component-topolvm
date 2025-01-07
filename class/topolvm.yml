@@ -11,7 +11,7 @@ parameters:
       - input_paths:
           - ${_base_directory}/component/app.jsonnet
         input_type: jsonnet
-        output_path: apps/
+        output_path: .
       # Custom Manifests
       - input_paths:
           - ${_base_directory}/component/main.jsonnet
