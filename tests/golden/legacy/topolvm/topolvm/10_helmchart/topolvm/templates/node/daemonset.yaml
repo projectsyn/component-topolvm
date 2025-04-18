@@ -7,8 +7,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.36.3
-    helm.sh/chart: topolvm-15.5.3
+    app.kubernetes.io/version: 0.36.4
+    helm.sh/chart: topolvm-15.5.4
   name: topolvm-node
   namespace: syn-topolvm
 spec:
@@ -39,7 +39,7 @@ spec:
                   fieldPath: spec.nodeName
             - name: USE_LEGACY
               value: 'true'
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.36.3
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.36.4
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
@@ -83,7 +83,7 @@ spec:
             - --csi-address=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
             - --kubelet-registration-path=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
             - --http-endpoint=:9809
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.36.3
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.36.4
           imagePullPolicy: IfNotPresent
           lifecycle:
             preStop:
@@ -112,7 +112,7 @@ spec:
             - /livenessprobe
             - --csi-address=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
             - --http-endpoint=:9808
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.36.3
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.36.4
           imagePullPolicy: IfNotPresent
           name: liveness-probe
           volumeMounts:
