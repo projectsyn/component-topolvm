@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
     app.kubernetes.io/version: 0.36.4
-    helm.sh/chart: topolvm-15.5.4
+    helm.sh/chart: topolvm-15.5.5
   name: topolvm.io
 spec:
   attachRequired: false

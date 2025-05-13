@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
     app.kubernetes.io/version: 0.36.4
-    helm.sh/chart: topolvm-15.5.4
+    helm.sh/chart: topolvm-15.5.5
   name: syn-topolvm:controller
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -25,7 +25,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
     app.kubernetes.io/version: 0.36.4
-    helm.sh/chart: topolvm-15.5.4
+    helm.sh/chart: topolvm-15.5.5
   name: syn-topolvm-csi-provisioner-role
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -44,7 +44,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
     app.kubernetes.io/version: 0.36.4
-    helm.sh/chart: topolvm-15.5.4
+    helm.sh/chart: topolvm-15.5.5
   name: syn-topolvm-csi-resizer-role
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -63,7 +63,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
     app.kubernetes.io/version: 0.36.4
-    helm.sh/chart: topolvm-15.5.4
+    helm.sh/chart: topolvm-15.5.5
   name: syn-topolvm-csi-snapshotter-role
 roleRef:
   apiGroup: rbac.authorization.k8s.io
