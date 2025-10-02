@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.36.5
-    helm.sh/chart: topolvm-15.5.6
+    app.kubernetes.io/version: 0.38.0
+    helm.sh/chart: topolvm-15.7.0
   name: syn-topolvm:node
 rules:
   - apiGroups:
