@@ -5,7 +5,7 @@ local inv = kap.inventory();
 // The hiera parameters for the component
 local params = inv.parameters.topolvm;
 
-local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
+local isOpenshift = std.member([ 'openshift4', 'oke' ], inv.parameters.facts.distribution);
 local instance = inv.parameters._instance;
 
 local openshiftScc = {
