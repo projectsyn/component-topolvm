@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.38.0
-    helm.sh/chart: topolvm-15.7.0
+    app.kubernetes.io/version: 0.38.1
+    helm.sh/chart: topolvm-15.7.1
   name: topolvm-controller
   namespace: syn-topolvm
 spec:
@@ -45,7 +45,7 @@ spec:
           env:
             - name: USE_LEGACY
               value: 'true'
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.38.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.38.1
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
@@ -80,6 +80,11 @@ spec:
             requests:
               cpu: 10m
               memory: 200Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           volumeMounts:
             - mountPath: /run/topolvm
               name: socket-dir
@@ -101,12 +106,17 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.38.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.38.1
           imagePullPolicy: IfNotPresent
           name: csi-provisioner
           ports:
             - containerPort: 9809
               name: csi-provisioner
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           volumeMounts:
             - mountPath: /run/topolvm
               name: socket-dir
@@ -116,12 +126,17 @@ spec:
             - --leader-election
             - --leader-election-namespace=syn-topolvm
             - --http-endpoint=:9810
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.38.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.38.1
           imagePullPolicy: IfNotPresent
           name: csi-resizer
           ports:
             - containerPort: 9810
               name: csi-resizer
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           volumeMounts:
             - mountPath: /run/topolvm
               name: socket-dir
@@ -131,12 +146,17 @@ spec:
             - --leader-election
             - --leader-election-namespace=syn-topolvm
             - --http-endpoint=:9811
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.38.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.38.1
           imagePullPolicy: IfNotPresent
           name: csi-snapshotter
           ports:
             - containerPort: 9811
               name: csi-snapshotter
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           volumeMounts:
             - mountPath: /run/topolvm
               name: socket-dir
@@ -144,9 +164,14 @@ spec:
             - /livenessprobe
             - --csi-address=/run/topolvm/csi-topolvm.sock
             - --http-endpoint=:9808
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.38.0
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.38.1
           imagePullPolicy: IfNotPresent
           name: liveness-probe
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           volumeMounts:
             - mountPath: /run/topolvm
               name: socket-dir
