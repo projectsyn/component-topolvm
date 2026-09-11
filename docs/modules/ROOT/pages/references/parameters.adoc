@@ -89,6 +89,25 @@ parameters:
         volumeexpansion: true
 ----
 
+== `ignore_alerts`
+
+[horizontal]
+type:: list
+default:: []
+
+List of alert rule names to be dropped.
+Names are given without the `SYN_` prefix.
+
+=== Example
+
+[source,yaml]
+----
+parameters:
+  topolvm:
+    ignore_alerts:
+      - TopoLVMVolumeGroupNearFull
+----
+
 == `helmValues`
 
 [horizontal]
