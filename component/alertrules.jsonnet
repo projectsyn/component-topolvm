@@ -5,13 +5,6 @@ local kube = import 'lib/kube.libjsonnet';
 local inv = kap.inventory();
 local params = inv.parameters.topolvm;
 
-local isOpenshift = std.startsWith(inv.parameters.facts.distribution, 'openshift');
-
-assert
-  std.member(inv.applications, 'openshift4-monitoring') ||
-  isOpenshift != true
-  : 'Component openshift4-monitoring is not available';
-
 // Upstream alerts to ignore
 local ignore_alerts = std.set(
   // Add set of alerts that should be ignored from `params.ignore_alerts`
@@ -24,7 +17,7 @@ local alertrules = {
       name: 'topolvm-alert.rules',
       rules: [
         {
-          alert: 'SYN_TopoLVMVolumeGroupAlmostFull',
+          alert: 'TopoLVMVolumeGroupAlmostFull',
           annotations: {
             description: |||
               Utilization of volume group {{ $labels.device_class }}
@@ -39,12 +32,10 @@ local alertrules = {
           'for': '10m',
           labels: {
             severity: 'warning',
-            syn: 'true',
-            syn_component: 'topolvm',
           },
         },
         {
-          alert: 'SYN_TopoLVMVolumeGroupNearFull',
+          alert: 'TopoLVMVolumeGroupNearFull',
           annotations: {
             description: |||
               Utilization of volume group {{ $labels.device_class }}
@@ -59,8 +50,6 @@ local alertrules = {
           'for': '1h',
           labels: {
             severity: 'warning',
-            syn: 'true',
-            syn_component: 'topolvm',
           },
         },
       ],
@@ -68,27 +57,26 @@ local alertrules = {
   ],
 };
 
+local groups = std.filter(
+  function(g) std.length(g.rules) > 0,
+  [
+    alertpatching.filterPatchRules(g, ignoreNames=ignore_alerts)
+    for g in alertrules.groups
+  ]
+);
+
+local has_monitoring = std.member(inv.applications, 'prometheus') || std.member(inv.applications, 'openshift4-monitoring');
+local has_alerts = std.length(groups) > 0;
+
 // Define outputs below
-if isOpenshift then
-  {
-    '20_rules': kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'syn-topolvm-rules') {
+{
+  [if has_monitoring && has_alerts then '20_rules']:
+    kube._Object('monitoring.coreos.com/v1', 'PrometheusRule', 'syn-topolvm-rules') {
       metadata+: {
         namespace: params.namespace,
       },
       spec: {
-        groups: std.filter(
-          function(it) it != null,
-          [
-            local r = alertpatching.filterPatchRules(g, ignore_alerts);
-            if std.length(r.rules) > 0 then r
-            for g in alertrules.groups
-          ]
-        ),
+        groups: groups,
       },
     },
-  }
-else
-  std.trace(
-    'Alert handling library not available, not deploying alertrules',
-    {}
-  )
+}
