@@ -8,15 +8,22 @@ parameters:
       - type: https
         source: https://raw.githubusercontent.com/projectsyn/component-storageclass/v1.0.0/lib/storageclass.libsonnet
         output_path: vendor/lib/storageclass.libsonnet
+      - type: https
+        source: https://raw.githubusercontent.com/projectsyn/component-prometheus/master/lib/prometheus-alert-patching.libsonnet
+        output_path: vendor/lib/alert-patching.libsonnet
 
   facts:
     distribution: eks
 
-  openshift4_monitoring:
-    alerts:
-      ignoreNames: []
-      customAnnotations: {}
-
   storageclass:
     defaults: {}
     defaultClass: ""
+
+  prometheus:
+    alerts:
+      ignoreNames:
+        - TopoLVMVolumeGroupAlmostFull
+
+  topolvm:
+    ignore_alerts:
+      - TopoLVMVolumeGroupNearFull
