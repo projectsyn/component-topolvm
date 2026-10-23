@@ -7,8 +7,8 @@ metadata:
     app.kubernetes.io/instance: topolvm
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: topolvm
-    app.kubernetes.io/version: 0.41.1
-    helm.sh/chart: topolvm-17.2.0
+    app.kubernetes.io/version: 0.42.0
+    helm.sh/chart: topolvm-17.3.0
   name: topolvm-node
   namespace: syn-topolvm
 spec:
@@ -39,7 +39,7 @@ spec:
                   fieldPath: spec.nodeName
             - name: USE_LEGACY
               value: 'true'
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.41.1@sha256:70548dbe0c6addcccf79a557f29e95db2e6dc2cba2102988c91f30086004d0fc
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.42.0@sha256:719ab11d974af827d12ab148ca9c070babcb21980b8c7f30497c6bde81cdce4b
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
@@ -83,7 +83,7 @@ spec:
             - --csi-address=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
             - --kubelet-registration-path=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
             - --http-endpoint=:9809
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.41.1@sha256:70548dbe0c6addcccf79a557f29e95db2e6dc2cba2102988c91f30086004d0fc
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.42.0@sha256:719ab11d974af827d12ab148ca9c070babcb21980b8c7f30497c6bde81cdce4b
           imagePullPolicy: IfNotPresent
           lifecycle:
             preStop:
@@ -112,7 +112,7 @@ spec:
             - /livenessprobe
             - --csi-address=/var/lib/kubelet/plugins/topolvm.cybozu.com/node/csi-topolvm.sock
             - --http-endpoint=:9808
-          image: ghcr.io/topolvm/topolvm-with-sidecar:0.41.1@sha256:70548dbe0c6addcccf79a557f29e95db2e6dc2cba2102988c91f30086004d0fc
+          image: ghcr.io/topolvm/topolvm-with-sidecar:0.42.0@sha256:719ab11d974af827d12ab148ca9c070babcb21980b8c7f30497c6bde81cdce4b
           imagePullPolicy: IfNotPresent
           name: liveness-probe
           volumeMounts:
